@@ -1,0 +1,23 @@
+# data & weights
+data/
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# runs
+runs/
+wandb/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# editor / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
