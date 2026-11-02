@@ -205,12 +205,12 @@ pre.out{
 <main id="content">
 
 <h2 class="sec" id="how">如何使用这份教程<span class="en">How to use</span></h2>
-<p class="lead">这不是语法词典，是一份<b>按教程节奏写的通关手册</b>。每一节都是同一个套路：先说这玩意解决什么问题 → 上代码（带 ①②③ 路标）→ 逐条拆解每行在干什么、为什么 → 看运行结果 → 记住坑。你要做的是过三遍。</p>
+<p class="lead">这份教程按「问题 → 预测 → 运行 → 解释 → 改写」组织。目标不是背下 API，而是能根据数据形状和任务选择写法，并用运行结果验证自己的判断。</p>
 
 <div class="mem">
-  <div class="card"><div class="ttl">第 1 遍 · 通读</div><div class="bd">从头到尾看，<b>不要求记住</b>。重点是看懂每个「为什么」，尤其是标 <span class="badge hot">重点</span> 的章节（axis、广播、loc/iloc、autograd、训练循环）。</div></div>
-  <div class="card"><div class="ttl">第 2 遍 · 手敲</div><div class="bd">把每个代码块亲手敲进 Python 跑一遍，边敲边对照 ①②③ 讲解。<b>手敲 &gt; 眼看</b>，肌肉记忆比脑子靠谱。</div></div>
-  <div class="card"><div class="ttl">第 3 遍 · 查阅</div><div class="bd">读真实项目代码卡住时 → 左上角搜索框搜语法 → 跳到对应小节看拆解。这是日常用法。</div></div>
+  <div class="card"><div class="ttl">第 1 步 · 先预测</div><div class="bd">读代码前先写下你认为的输出、shape、dtype 或是否共享内存。不会也没关系，先留下一个可检验的猜测。</div></div>
+  <div class="card"><div class="ttl">第 2 步 · 运行并解释</div><div class="bd">运行示例，逐项对照预测；用自己的话解释差异，再改一个输入或参数，观察结果如何变化。</div></div>
+  <div class="card"><div class="ttl">第 3 步 · 独立完成</div><div class="bd">完成每部分末尾的练习后，再用搜索框查阅语法。能解释并改写一个例子，比默写代码更能说明已经学会。</div></div>
 </div>
 
 <div class="box tip">
@@ -218,8 +218,14 @@ pre.out{
 <p>· 代码行尾的 <code class="inl"># =&gt;</code> 表示这行代码的输出结果</p>
 <p>· 代码行尾的 <code class="inl"># ①</code> 是路标：代码块下方有对应编号的逐条讲解</p>
 <p>· <span class="badge hot">重点</span> = 高频 + 易错，必须掌握 · <span class="badge">易混</span> = 长得像但含义不同 · <span class="badge new">原理</span> = 解释为什么</p>
-<p>· 所有代码默认已执行 <code class="inl">import numpy as np</code>、<code class="inl">import pandas as pd</code>、<code class="inl">import torch</code>、<code class="inl">import matplotlib.pyplot as plt</code></p>
+<p>· 代码块是教学片段，不保证每块都能单独运行；按顺序执行，并先运行本节所需的 import 和变量定义</p>
+<p>· 在 Jupyter 中，单元格通常只自动显示最后一个表达式的结果；想同时查看多项结果，请分别运行或用 <code class="inl">print()</code></p>
+<p>· 生成器、<code class="inl">map</code>、<code class="inl">zip</code> 等惰性对象要通过 <code class="inl">next()</code>、<code class="inl">for</code> 或 <code class="inl">list()</code> 消费后才会产出值</p>
 </div>
+
+<div class="box tip"><span class="t">运行准备</span><p>建议使用 Python 3.10 或更新版本。Python 基础和 NumPy 章节可单独学习；pandas、PyTorch、Matplotlib 章节分别需要安装对应库。可先安装 <code class="inl">numpy</code>、<code class="inl">pandas</code>、<code class="inl">matplotlib</code>、<code class="inl">scikit-learn</code>、<code class="inl">openpyxl</code>；PyTorch、torchvision 请按操作系统和 CPU/GPU 环境使用<a href="https://pytorch.org/get-started/locally/">官方安装选择器</a>。遇到缺少库的报错时，先确认当前 notebook 使用的解释器与安装依赖的解释器相同。</p></div>
+
+<div class="box ok"><span class="t">每节的完成标准</span><p>不看答案，能说明代码解决什么问题、输入输出形状如何变化、关键参数改变后会发生什么；遇到不确定的结果，能运行一个最小例子验证。达不到时回到对应概念，不必从头背整节。</p></div>
 
 <h2 class="sec" id="part1" data-nav="PART 1 · Python 恼火语法">PART 1 · Python 恼火语法</h2>
 <p class="lead">这一部分专治「Python 语法看了就忘」：切片、推导式、星号、装饰器……每一个都是深度学习代码里的高频常客，每一个都曾让你在读代码时卡住。写法上不讲大道理，每节就是「一段代码 + 逐条拆解」，把它当背诵卡片过几遍，肌肉记忆就有了。</p>
@@ -331,7 +337,7 @@ a[5:1:-1]    # =&gt; [5, 4, 3, 2]                         # ④
 s = "PyTorch"
 s[::2]       # =&gt; 'Ptrh'                               # ⑤
 s[::-1]      # =&gt; 'hcroTyP'                            # ⑥</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>步长 2 就是「隔一个取一个」，从下标 0 出发走 0、2、4、6、8。下采样（把序列缩到一半）就是这么写的。</p></div><div class="xi"><span class="xn">②</span><p>换个起点从下标 1 出发，拿到全部奇数。起点和步长一组合，「取奇数位 / 取偶数位」一行搞定。</p></div><div class="xi"><span class="xn">③</span><p>步长 -1、两端都省略，就是从最后一个倒着走到头——Python 里最常用的反转写法。列表有 <code class="inl">.reverse()</code>，字符串没有，所以 <code class="inl">s[::-1]</code> 是字符串反转的唯一惯用招。</p></div><div class="xi"><span class="xn">④</span><p>步长为负时方向反了，规则变成「含 start、不含 stop，但 start 要在 stop 右边」。从 5 倒着走到 1（不含 1），拿到 5、4、3、2。反向切片不常用，但读别人代码时得认识。</p></div><div class="xi"><span class="xn">⑤</span><p>字符串是序列，切片规则和列表完全一致。'PyTorch' 里下标 0、2、4、6 的字符是 P、T、r、h，所以是 'Ptrh'——别靠猜，自己数一遍。</p></div><div class="xi"><span class="xn">⑥</span><p>同理，字符串反转。以后看到 <code class="inl">tokens[::-1]</code> 就知道是把序列整个倒过来。</p></div></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>步长 2 就是「隔一个取一个」，从下标 0 出发走 0、2、4、6、8。下采样（把序列缩到一半）就是这么写的。</p></div><div class="xi"><span class="xn">②</span><p>换个起点从下标 1 出发，拿到全部奇数。起点和步长一组合，「取奇数位 / 取偶数位」一行搞定。</p></div><div class="xi"><span class="xn">③</span><p>步长 -1、两端都省略，就是从最后一个倒着走到头。列表可用 <code class="inl">.reverse()</code> 原地反转，字符串没有这个方法；<code class="inl">s[::-1]</code> 是常见的非原地反转写法。</p></div><div class="xi"><span class="xn">④</span><p>步长为负时方向反了，规则变成「含 start、不含 stop，但 start 要在 stop 右边」。从 5 倒着走到 1（不含 1），拿到 5、4、3、2。反向切片不常用，但读别人代码时得认识。</p></div><div class="xi"><span class="xn">⑤</span><p>字符串是序列，切片规则和列表完全一致。'PyTorch' 里下标 0、2、4、6 的字符是 P、T、r、h，所以是 'Ptrh'——别靠猜，自己数一遍。</p></div><div class="xi"><span class="xn">⑥</span><p>同理，字符串反转。以后看到 <code class="inl">tokens[::-1]</code> 就知道是把序列整个倒过来。</p></div></div>
 <div class="box ok"><span class="t">一句话焊死</span><p><b>含头不含尾</b>。<code class="inl">a[2:5]</code> 取 3 个（5-2=3），<code class="inl">a[:i]</code> + <code class="inl">a[i:]</code> = 完整的 a。NumPy、pandas 的 iloc、PyTorch 张量切片全部沿用这套规则，这里学会了后面全免费。唯一例外是 pandas 的 <code class="inl">df.loc['a':'c']</code>（按标签切），它是闭区间，到 PART 3 再说。</p></div>
 <h3 id="p1-2" data-hot="1" data-nav="1.2 推导式">推导式<span class="badge hot">重点</span></h3>
 <p>推导式是 Python 最标志性的语法：一行代码完成「遍历 + 变换 + 过滤」。深度学习代码里造损失列表、拼路径、筛样本全靠它。读不顺推导式，你连训练日志都看不懂。</p>
@@ -386,7 +392,7 @@ list(enumerate(names))            # =&gt; [(0, 'a'), (1, 'b'), (2, 'c')]     # �
 list(enumerate(names, start=1))   # =&gt; [(1, 'a'), (2, 'b'), (3, 'c')]     # ②
 list(zip(names, scores))          # =&gt; [('a', 88), ('b', 92), ('c', 75)]  # ③
 dict(zip(names, scores))          # =&gt; {'a': 88, 'b': 92, 'c': 75}        # ④</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>enumerate 把「计数器和元素」成对发给你，替代 <code class="inl">range(len(names))</code> 加 <code class="inl">names[i]</code> 的丑写法。机制上它是个生成器，每次产出一个 (下标, 元素) 元组，正好被 for 解包。</p></div><div class="xi"><span class="xn">②</span><p>start 参数让计数从 1 开始——打印「第几轮 epoch」这种人类计数场景用它，比 i+1 干净。</p></div><div class="xi"><span class="xn">③</span><p>zip 像拉链一样把两个序列按位置咬合，产出元组。注意 zip 是惰性的（返回迭代器不是列表），要看内容得 list() 包一层。</p></div><div class="xi"><span class="xn">④</span><p>zip 的产出正好是「键值对」，直接灌给 dict() 就造出字典——两个平行列表合成一个映射，这是 zip 最漂亮的用法，样本列表和标签列表合成 dataset 映射就用它。</p></div></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>enumerate 把「计数器和元素」成对交给你，替代 <code class="inl">range(len(names))</code> 加 <code class="inl">names[i]</code>。它返回一个迭代器，每次迭代产出一个 (下标, 元素) 元组，正好被 for 解包。</p></div><div class="xi"><span class="xn">②</span><p>start 参数让计数从 1 开始——打印「第几轮 epoch」这种人类计数场景用它，比 i+1 干净。</p></div><div class="xi"><span class="xn">③</span><p>zip 像拉链一样把两个序列按位置咬合，产出元组。注意 zip 是惰性的（返回迭代器不是列表），要看内容得 list() 包一层。</p></div><div class="xi"><span class="xn">④</span><p>zip 的产出正好是「键值对」，直接灌给 dict() 就造出字典——两个平行列表合成一个映射，这是 zip 最漂亮的用法，样本列表和标签列表合成 dataset 映射就用它。</p></div></div>
 <p>zip 还有个镜像操作：反 zip（转置）。</p>
 <div class="cell"><div class="bar"><span>zip2.py</span><span class="cp">复制</span></div><pre><code>pairs = [('a', 88), ('b', 92), ('c', 75)]
 
@@ -501,14 +507,19 @@ wrapper(1, 2, bias=3)    # =&gt; (1, 2, 3)    # ③</code></pre></div>
 <div class="box ok"><span class="t">一张嘴记住方向</span><p><b>定义处星号 = 收（打包进函数），调用处星号 = 撒（拆开传出去）</b>。看到 <code class="inl">def f(*args)</code> 是收集，看到 <code class="inl">f(*lst)</code> 是炸开——同一个符号，看它站在哪一边。</p></div>
 <div class="box warn"><span class="t">参数顺序铁律</span><p>完整签名只能按这个顺序：<code class="inl">def f(普通参数, 默认参数, *args, 仅关键字参数, <b>kwargs)</code>，</b>kwargs 永远垫底。顺序写反 Python 直接语法报错，报错时把这条翻出来对一下。</p></div>
 <h3 id="p1-9" data-nav="1.9 生成器与迭代器">生成器与迭代器<span class="badge new">原理</span></h3>
-<p>为什么 DataLoader 能在不爆内存的前提下读几个 GB 的数据？答案就是 yield。这一节讲透「惰性求值」：数据不是提前备好，而是你伸手我才给。</p>
+<p>生成器能按需产出数据，常用于逐批读取大数据集；但 <code class="inl">yield</code> 本身不会自动读硬盘，也不能保证内存恒定。这一节先用可见的输出观察「暂停与恢复」，再看分批数据。</p>
 <div class="cell"><div class="bar"><span>gen_yield.py</span><span class="cp">复制</span></div><pre><code>def countdown(n):
-    while n &gt; 0:
-        yield n        # ①
-        n -= 1         # ②
+  while n &gt; 0:
+    print("准备产出", n)
+    yield n
+    print("恢复执行", n)
+    n -= 1
 
-list(countdown(3))     # =&gt; [3, 2, 1]    # ③</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>函数体里出现 yield，这个函数就不再是普通函数——调用它不执行任何代码，而是返回一个「生成器对象」。yield 的语义是「产出一个值，然后原地冻结」。</p></div><div class="xi"><span class="xn">②</span><p>冻结点就停在 yield 这一行：局部变量 n、执行位置全部原样保存。下次要值时从冻结处苏醒继续跑，n -= 1 照常执行——这就是生成器能「记住进度」的原因。</p></div><div class="xi"><span class="xn">③</span><p>list() 不断向生成器要值，countdown 被反复唤醒，产出 3、2、1；循环自然结束，生成器宣告枯竭。整个过程像挤牙膏：叫一下挤一点。</p></div></div>
+g = countdown(3)
+print(next(g))
+print(next(g))
+print(list(g))</code></pre></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>调用含有 <code class="inl">yield</code> 的函数只会得到生成器对象；函数体要等第一次取值才开始运行，所以创建 <code class="inl">g</code> 时不会打印。</p></div><div class="xi"><span class="xn">②</span><p>每次 <code class="inl">next(g)</code> 都让函数运行到下一个 <code class="inl">yield</code>。第一次打印「准备产出 3」并返回 3；第二次先从上次暂停处恢复，打印「恢复执行 3」，再产出 2。</p></div><div class="xi"><span class="xn">③</span><p><code class="inl">list(g)</code> 会继续取值直到生成器结束，因此最后得到 <code class="inl">[1]</code>。生成器保存暂停位置和局部变量；用完后不能从头重放。</p></div></div>
 <div class="cell"><div class="bar"><span>gen_trap.py</span><span class="cp">复制</span></div><pre><code>g = (x * x for x in range(3))    # ①
 list(g)                          # =&gt; [0, 1, 4]    # ②
 list(g)                          # =&gt; []           # ③
@@ -518,19 +529,27 @@ next(it)                         # =&gt; 1
 next(it)                         # =&gt; 2
 next(it)                         # =&gt; 3
 next(it)                         # =&gt; StopIteration   # ⑤</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>圆括号形式是「生成器表达式」——1.2 节推导式的表亲。它不立刻算出列表，只造了一台「按需产值的机器」，内存占用恒定。</p></div><div class="xi"><span class="xn">②</span><p>第一次 list() 把牙膏挤完，拿到 0、1、4。</p></div><div class="xi"><span class="xn">③</span><p>再挤一次：空。<b>生成器是一次性的</b>，用完即枯竭，这是新手最意外的行为。要对同一序列反复迭代，老实先 list() 成列表。</p></div><div class="xi"><span class="xn">④</span><p>一切迭代的最底层协议：iter() 拿到迭代器，next() 一个一个要值。你每天写的 for 循环，解释器帮你做的其实就是这两步。</p></div><div class="xi"><span class="xn">⑤</span><p>值耗尽时 next 抛出 StopIteration——for 循环正是捕获这个信号才正常结束的。所以「循环怎么知道该停了」的答案是：迭代器举手投降了。</p></div></div>
-<div class="cell"><div class="bar"><span>gen_batch.py</span><span class="cp">复制</span></div><pre><code>def batches(seq, n):
-    for i in range(0, len(seq), n):
-        yield seq[i:i + n]       # ①
+<div class="xp"><div class="xi"><span class="xn">①</span><p>圆括号形式是「生成器表达式」——1.2 节推导式的表亲。它按需计算结果，不会预先保存完整结果列表；实际内存还取决于它引用的输入数据和消费方式。</p></div><div class="xi"><span class="xn">②</span><p>第一次 list() 把牙膏挤完，拿到 0、1、4。</p></div><div class="xi"><span class="xn">③</span><p>再挤一次：空。<b>生成器是一次性的</b>，用完即枯竭，这是新手最意外的行为。要对同一序列反复迭代，可以先保存结果为列表；数据很大时则要考虑存储和内存成本。</p></div><div class="xi"><span class="xn">④</span><p>一切迭代的最底层协议：iter() 拿到迭代器，next() 一个一个要值。你每天写的 for 循环，解释器帮你做的其实就是这两步。</p></div><div class="xi"><span class="xn">⑤</span><p>值耗尽时 next 抛出 StopIteration——for 循环正是捕获这个信号才正常结束的。所以「循环怎么知道该停了」的答案是：迭代器举手投降了。</p></div></div>
+<div class="cell"><div class="bar"><span>gen_batch.py</span><span class="cp">复制</span></div><pre><code>def batches(iterable, batch_size):
+  if batch_size &lt;= 0:
+    raise ValueError("batch_size must be positive")
+  batch = []
+  for item in iterable:
+    batch.append(item)
+    if len(batch) == batch_size:
+      yield batch
+      batch = []
+  if batch:
+    yield batch
 
-list(batches([1, 2, 3, 4, 5], 2))    # =&gt; [[1, 2], [3, 4], [5]]    # ②
+list(batches([1, 2, 3, 4, 5], 2))
 
 def cycle(seq):    # ③
     while True:
         for x in seq:
             yield x</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>迷你版 DataLoader：每次产出一个切片，步长是 batch 大小。range 的第三个参数正好实现「跳着切块」，最后一块不满也照给。</p></div><div class="xi"><span class="xn">②</span><p>验证：5 个元素按 2 一批，切出 [1,2]、[3,4]、[5]。DataLoader 的采样器骨子里就是这个 yield 循环。</p></div><div class="xi"><span class="xn">③</span><p>无限生成器：外层 while True 永不结束，yield 源源不断——「循环采样」的原理，序列走完从头再来。必须配 itertools.islice 之类的截断才能安全使用。</p></div></div>
-<div class="box ok"><span class="t">为什么 DataLoader 全是 yield</span><p>一次把 10 万张图读进内存 = 立刻 OOM。yield 让「读数据」变成流水线：训练循环要一个 batch，生成器才加载一个 batch，用完即弃。<b>内存 O(1)，数据无限大</b>——这就是 PyTorch 数据管道建立在生成器上的原因。</p></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>这个分批生成器接受任意可迭代对象，每次攒够一批就交出去；末尾不足一批的数据也会交出。与切片方案不同，它不要求输入支持 <code class="inl">len()</code> 和下标访问。</p></div><div class="xi"><span class="xn">②</span><p>示例输入是列表，方便看结果；但列表本身已经整体在内存中，所以这段演示不会降低原始数据的内存占用。若输入本身是逐项读取的文件或数据流，生成器才可以避免预先加载整个数据集。</p></div><div class="xi"><span class="xn">③</span><p>无限生成器：外层 while True 永不结束，yield 源源不断——「循环采样」的原理，序列走完从头再来。必须配 itertools.islice 之类的截断才能安全使用。</p></div></div>
+<div class="box ok"><span class="t">yield 与 DataLoader</span><p><code class="inl">yield</code> 让迭代器按需交付数据，但不自动负责硬盘读取、释放内存或训练。只有数据源也逐步读取、训练代码及时处理而不长期保留批次时，缓冲内存才大致受批次大小限制；真实峰值还受数据源、预取和并行 worker 影响。PyTorch 的 <code class="inl">DataLoader</code> 还负责采样、组批等工作，不能简单等同于一个 <code class="inl">yield</code> 循环。</p></div>
 <h3 id="p1-10" data-hot="1" data-nav="1.10 装饰器">装饰器<span class="badge hot">重点</span></h3>
 <p>@torch.no_grad()、@property、@functools.wraps……深度学习代码里 @ 开头的东西全是装饰器。一句话戳穿它：<b>接收一个函数、返回一个新函数的语法糖</b>。</p>
 <div class="cell"><div class="bar"><span>decorator.py</span><span class="cp">复制</span></div><pre><code>import functools, time
@@ -630,7 +649,7 @@ ok  # =&gt; [[1, 0, 0], [0, 0, 0], [0, 0, 0]]</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p><code class="inl">[0] * 3</code> 没问题（0 是数字，复制无副作用），但外面再乘 3 复制的是「同一个内层列表的引用」三次——三行不是三份，是同一份的三张标签。这正是浅拷贝机制在字面量上的体现。</p></div><div class="xi"><span class="xn">②</span><p>改「第一行」的第一个元素，三行同时变——物理上只存在一个内层列表。画图建模板时这是最常见的一脚踩空。</p></div><div class="xi"><span class="xn">③</span><p>正确姿势：推导式让每行都「新造」一个 [0]*3，三行三份独立内存。建矩阵请条件反射地写推导式；真正的数值矩阵更该直接 np.zeros((3, 3))——那是 PART 2 的主场。</p></div></div>
 <div class="box warn"><span class="t">切片拷贝也是浅的</span><p><code class="inl">a[:]</code>、<code class="inl">a.copy()</code>、<code class="inl">list(a)</code>、<code class="inl">dict(a)</code> 全是浅拷贝，一层以下照样共享。要完全独立只有 <code class="inl">copy.deepcopy</code>。NumPy 的 <code class="inl">a[1:3]</code> 更狠——连外层都是视图不是副本，那是 PART 2 要重点处理的事。</p></div>
 <h3 id="p1-13" data-nav="1.13 类型标注与模块导入">类型标注与模块导入</h3>
-<p>现代深度学习代码全是类型标注：<code class="inl">def forward(x: Tensor) -&gt; Tensor</code>。它不改变运行行为（Python 根本不检查它），却能让 IDE 补全、让读者秒懂接口。再加上 import 的几种姿势，你读开源项目的最后一道语法屏障就拆掉了。</p>
+<p>现代深度学习代码常见类型标注：<code class="inl">def forward(x: Tensor) -&gt; Tensor</code>。Python 默认不会按标注自动校验参数，但 IDE 和静态类型检查器可以用它发现不匹配；读者也能更快了解函数接口。再加上 import 的几种姿势，你读开源项目时就多了一件实用工具。</p>
 <div class="cell"><div class="bar"><span>typing_demo.py</span><span class="cp">复制</span></div><pre><code>def scale(x: list[float], k: float = 1.0) -&gt; list[float]:    # ①
     return [v * k for v in x]
 
@@ -641,7 +660,7 @@ def find(x: dict[str, int], key: str, default: int | None = None) -&gt; int | No
 
 find({'a': 1}, 'a')    # =&gt; 1</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>冒号后写参数类型、箭头后写返回类型。Python 3.10 起内置容器可以直接下标：list[float]、dict[str, int]，不再需要 typing.List 这种大写版本——但旧代码里你仍会见到，两者等价。</p></div><div class="xi"><span class="xn">②</span><p>标注对运行零影响：你传个字符串进来它也不拦（报错也是运行时表达式那儿的锅）。它的价值全在「写给人看、写给工具看」，所以框架源码才把它当接口文档用。</p></div><div class="xi"><span class="xn">③</span><p><code class="inl">int | None</code> 读作「int 或 None」，等价于老写法 Optional[int]。Optional 这名字有历史误导性——它的意思不是「可选参数」而是「可以为 None」，新代码用竖线清爽得多。</p></div></div>
-<table><tr><th>标注</th><th>含义</th><th>场景</th></tr><tr><td><code class="inl">x: int</code></td><td>参数类型</td><td>一切函数</td></tr><tr><td><code class="inl">-&gt; float</code></td><td>返回类型</td><td>一切函数</td></tr><tr><td><code class="inl">list[int]</code> / <code class="inl">dict[str, float]</code></td><td>容器元素类型</td><td>数据结构</td></tr><tr><td>`int \</td><td>None`</td><td>可能为 None</td><td>可选返回 / 参数</td></tr><tr><td><code class="inl">Callable[[int], float]</code></td><td>函数类型</td><td>回调、key=</td></tr><tr><td><code class="inl">x: Tensor -&gt; Tensor</code></td><td>张量进出</td><td>forward 签名</td></tr></table>
+<table><tr><th>标注</th><th>含义</th><th>场景</th></tr><tr><td><code class="inl">x: int</code></td><td>参数类型</td><td>函数参数</td></tr><tr><td><code class="inl">-&gt; float</code></td><td>返回类型</td><td>函数返回值</td></tr><tr><td><code class="inl">list[int]</code> / <code class="inl">dict[str, float]</code></td><td>容器元素类型</td><td>数据结构</td></tr><tr><td><code class="inl">int | None</code></td><td>可能为 None</td><td>可空返回值或参数</td></tr><tr><td><code class="inl">Callable[[int], float]</code></td><td>函数类型</td><td>回调、key=</td></tr><tr><td><code class="inl">Tensor -&gt; Tensor</code></td><td>张量进出</td><td>forward 签名示意</td></tr></table>
 <p>表里 Callable 来自 typing 模块（<code class="inl">from typing import Callable</code>），表示「吃一个 int 吐一个 float 的函数」——装饰器、回调、key 参数的标注都靠它。</p>
 <div class="cell"><div class="bar"><span>import_demo.py</span><span class="cp">复制</span></div><pre><code>import numpy as np                       # ①
 from torch import nn                     # ②
@@ -680,7 +699,7 @@ x is y                 # =&gt; False
 
 val = None
 val is None            # =&gt; True   ✓ is 的唯一合法用途</code></pre></div>
-<p>== 比较值，is 比较身份（内存里是不是同一个对象）。小整数（-5~256）和短字符串会被解释器缓存复用，于是 is 有时「碰巧」返回 True，换个数字就 False——同一份代码今天能跑明天崩。铁律：<b>is 只用于 None / True / False</b>，比值永远 ==。</p>
+<p>== 比较值，is 比较身份（是不是同一个对象）。小整数和某些字符串可能被解释器复用，因此不要用 is 比较普通值。日常最常见的用途是 <code class="inl">x is None</code>；比数值或字符串的内容时用 ==。</p>
 <p><b>坑 3：边遍历边删</b></p>
 <div class="cell"><div class="bar"><span>pit3.py</span><span class="cp">复制</span></div><pre><code>a = [1, 2, 2, 3]
 for x in a:                  # ✗
@@ -739,7 +758,7 @@ def bump():
 <div class="cell"><div class="bar"><span>pit9.py</span><span class="cp">复制</span></div><pre><code>round(2.5)             # =&gt; 2（不是 3！）
 round(3.5)             # =&gt; 4
 round(0.125, 2)        # =&gt; 0.12</code></pre></div>
-<p>Python 的 round 在「恰好一半」时取偶数：2.5 → 2、3.5 → 4，目的是统计上不系统性偏大（银行家舍入）。但带着「四舍五入」直觉的人必踩空。要传统四舍五入，正数可以 <code class="inl">int(x + 0.5)</code>，严肃场景用 decimal 模块。</p>
+<p>Python 的 round 对可精确表示的「恰好一半」采用 ties-to-even：2.5 → 2、3.5 → 4。像 0.125 这样的十进制小数可能无法用二进制浮点精确表示，因此结果还受浮点近似影响。涉及财务或明确的十进制舍入规则时，使用 <code class="inl">decimal.Decimal</code> 并指定舍入模式。</p>
 <p><b>坑 10：负数的整除与取余</b></p>
 <div class="cell"><div class="bar"><span>pit10.py</span><span class="cp">复制</span></div><pre><code>7 // 2                 # =&gt; 3
 -7 // 2                # =&gt; -4（不是 -3！）
@@ -748,9 +767,10 @@ round(0.125, 2)        # =&gt; 0.12</code></pre></div>
 int(-7 / 2)            # =&gt; -3（向零截断，和 // 不同）</code></pre></div>
 <p>// 是「向下取整」（朝负无穷方向），不是「去掉小数」：-3.5 向下是 -4，而 int() 截断向零得 -3，两者只在负数上分家。% 的符号跟随除数，所以 -7 % 2 = 1（因为 -7 = -4×2 + 1）。做索引换算（分 batch、翻页）一旦遇到负数，这两个符号都会让你数组越界。</p>
 <div class="box ok"><span class="t">收官</span><p>这十个坑的共同根源只有一个：<b>Python 的对象模型是「引用语义」</b>——变量是标签、默认值共享、迭代器有状态、浮点是近似。PART 2 的 NumPy 会在「视图 vs 副本」上把同一主题再考你一遍。把这页折个角，每次半夜 Debug 时翻回来。</p></div>
+<div class="box tip"><span class="t">练习与自检</span><p>1. 用 <code class="inl">zip</code> 把两列数据组成字典，并让长度不一致时显式报错。2. 创建一个生成器，连续调用两次 <code class="inl">next()</code>，说明第二次调用从哪里继续。3. 写一个函数，把输入字符串反转后返回。</p><p><b>检查：</b>能说出生成器函数调用时为何还没有执行函数体；能区分切片的 stop 和最后一个元素下标。</p></div>
 <h2 class="sec" id="part2" data-nav="PART 2 · NumPy 数值计算">PART 2 · NumPy 数值计算</h2>
-<p class="lead">NumPy 是后面 pandas 和 PyTorch 共同的地基。你可以把 pandas 的 DataFrame 理解成「带标签的 ndarray」——它内部存的就是 NumPy 数组，只是给行列加了名字；也可以把 PyTorch 的 Tensor 理解成「能求导的 ndarray」——运算规则、广播机制、切片语法几乎原样照抄 NumPy。这一 PART 学扎实了，后面两 PART 你会不断遇到「这不就是 NumPy 吗」的既视感。</p>
-<p>所以别把这章当参考手册一次翻完就扔。2.1 的三个心智模型、2.7 的 axis、2.8 的广播、2.5 的视图，是全书回报率最高的四处投资：背下来，看任何深度学习代码都不再发怵。</p>
+<p class="lead">NumPy 提供多维数组和向量化运算，是理解 pandas 与 PyTorch 张量操作的有用基础。DataFrame 带行列标签且各列可有不同 dtype；现代 pandas 也支持 NumPy 以外的扩展数组。PyTorch Tensor 与 ndarray 有相似的形状、索引和广播操作，但另外有设备与自动求导语义。</p>
+<p>建议按顺序学习 shape、索引与视图、axis、广播，再用本部分练习检验是否能预测运算结果。</p>
 <h3 id="p2-1" data-hot="1" data-nav="2.1 三个心智模型：格子 / 广播 / 视图">三个心智模型：格子 / 广播 / 视图<span class="badge hot">必背</span></h3>
 <p>先把 NumPy 里最容易卡住人的三个概念，各用一句话 + 一小段代码钉在这里。细节分别在 2.7（axis）、2.8（广播）、2.5（视图）展开，这里你只需要记住结论。</p>
 <div class="cell"><div class="bar"><span>m_axis.py</span><span class="cp">复制</span></div><pre><code>a = np.arange(6).reshape(2, 3)
@@ -762,7 +782,7 @@ a.sum(axis=0)    # =&gt; [3 5 7]   第 0 维被压掉，结果从 (2,3) 变 (3,)
 b = a[0]        # 切片不拷贝数据：b 和 a 看着同一块内存
 b[0] = 99       # a[0, 0] 也变成 99 了</code></pre></div>
 <div class="box ok"><span class="t">三句话版本（先背这个）</span><p><b>axis = 沿哪一维压扁</b>：<code class="inl">sum(axis=0)</code> 沿第 0 维走，走完那一维就消失，结果少一维。</p><p><b>广播 = 从右往左对齐补 1</b>：shape 不同的两个数组，按右边对齐、左边补 1、逐位拉长，能拉齐就能运算。</p><p><b>切片 = 共享内存的窗口</b>：<code class="inl">b = a[1:]</code> 不搬数据，b 只是看 a 的一个新窗口，改 b 就是改 a。</p></div>
-<p>为什么 NumPy 要设计这三个别扭的东西？因为它的全部性能来自「一块连续内存 + 极少数通用规则」：不拷贝所以快（视图），不用循环所以快（广播），一条规则管所有维度所以好记（axis）。别扭是速度的代价，而这三个心智模型就是付账的货币。</p>
+<p>这三个概念帮助你理解 NumPy 的数据布局和批量运算：视图可以避免某些复制，广播避免显式铺开重复数据，axis 让同一种归约规则适用于不同维度。实际是否复制、是否更快，还取决于数组的 strides、操作和数据大小。</p>
 <h3 id="p2-2" data-nav="2.2 ndarray 四属性：shape / dtype / ndim / size">ndarray 四属性：shape / dtype / ndim / size</h3>
 <p>拿到任何一个陌生的数组，你要先问它四个问题：什么形状、什么类型、几维、几个元素。这四个属性决定了它 能跟谁广播、能跟谁运算、能不能喂给某个模型——不先看清这四样，后面的报错你根本读不懂。</p>
 <div class="cell"><div class="bar"><span>attrs.py</span><span class="cp">复制</span></div><pre><code>a = np.arange(12).reshape(3, 4)   # ①
@@ -1313,7 +1333,7 @@ np.linalg.norm(A, axis=1)   # ⑤ =&gt; [2.23606798 5.83095189]</code></pre></di
 <div class="xp"><div class="xi"><span class="xn">①</span><p>inv 求逆矩阵。可以先 <code class="inl">A @ inv(A)</code> 验证得到单位阵。但注意数值计算里<b>显式求逆通常是个坏主意</b>——既慢又不稳，理由见 ②。</p></div><div class="xi"><span class="xn">②</span><p>solve 直接解线性方程组 Ax=b，比 <code class="inl">inv(A) @ b</code> 又快又准（内部走 LU 分解，不用真的构造逆矩阵）。解出的 x=[-1, 1] 可以代回去口算验证：1×(-1)+2×1=1 ✓。日常需求一律 solve，inv 只在数学推导需要逆矩阵本身时用。</p></div><div class="xi"><span class="xn">③</span><p>det 行列式，判断矩阵是否可逆（=0 不可逆）。</p></div><div class="xi"><span class="xn">④</span><p>norm 默认对矩阵算 Frobenius 范数（所有元素平方和开根号，√39≈6.245）；对向量算欧氏长度。深度学习里的 L2 正则项就是它。</p></div><div class="xi"><span class="xn">⑤</span><p>加 <code class="inl">axis=1</code> 变成「<b>每行</b>算一个范数」，返回 (2,)——norm 也吃 axis，2.7 的规则继续生效。算每个样本向量的模长用这个，别写循环。</p></div></div>
 <div class="box tip"><span class="t">记忆抓手</span><p><code class="inl">*</code> 逐元素、<code class="inl">@</code> 矩阵乘；解方程用 solve 别用 inv；向量的长度、矩阵的规模感，都用 norm。</p></div>
 <h3 id="p2-13" data-nav="2.13 排序与搜索（sort/argsort/where/clip）">排序与搜索（sort/argsort/where/clip）</h3>
-<p>排序本身不难，难的是 argsort 这个「排下标」的思路——它是 top-k、按分数取名次的唯一正解。clip 则是深度学习里裁剪梯度（gradient clipping）的原型。</p>
+<p>排序本身不难，关键是理解 argsort 会返回排序后的原下标，因此能用来重排相关数据。取少量 top-k 时，<code class="inl">argpartition</code> 通常更省工作；需要完整排序或稳定的顺序时，再用 argsort。clip 则可用于裁剪数值范围。</p>
 <div class="cell"><div class="bar"><span>sort.py</span><span class="cp">复制</span></div><pre><code>a = np.array([3, 1, 4, 1, 5, 9])
 np.sort(a)          # ① =&gt; [1 1 3 4 5 9]
 np.argsort(a)       # ② =&gt; [1 3 0 2 4 5]
@@ -1338,7 +1358,7 @@ rng.integers(0, 10, size=5)       # ④
 rng.normal(0, 1, size=(2, 2))     # ⑤
 rng.permutation(10)               # ⑥</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p><code class="inl">default_rng(种子)</code> 创建一个<b>独立的</b>随机数生成器。种子固定 → 每次运行产出完全一样，这就是「可复现」；实验代码把种子写死，别人才能复现你的结果。</p></div><div class="xi"><span class="xn">②</span><p>random() 吐一个 [0,1) 的均匀浮点数。种子 42 的第一个值是 0.7740（输出里给了全精度），你可以拿这个值验证自己环境的种子机制工作正常。</p></div><div class="xi"><span class="xn">③</span><p>传 shape 元组一次要一批，<code class="inl">rng.random((2,2))</code> 直接返回 2×2 数组，不用循环填。</p></div><div class="xi"><span class="xn">④</span><p>integers 造随机整数：<code class="inl">[0, 10)</code> <b>含头不含尾</b>，size=5 给 5 个。造标签、造索引用它，注意和 random 一样不含上界。</p></div><div class="xi"><span class="xn">⑤</span><p>normal(均值, 标准差, shape) 造正态分布——初始化神经网络权重（比如 0.01 规模的高斯噪声）就是这个函数在干活。</p></div><div class="xi"><span class="xn">⑥</span><p>permutation 把 0~9 洗成乱序，返回新数组；配套的 <code class="inl">rng.shuffle(x)</code> 是原地打乱。训练前打乱数据集就靠 ⑥（配合 2.6 的花式索引使用）。</p></div></div>
-<div class="box warn"><span class="t">新旧接口</span><p>老代码里的 <code class="inl">np.random.seed(0)</code> + <code class="inl">np.random.rand(3)</code> 是<b>全局状态</b>接口：种子像全屋共用一个总闸，谁动了整个程序（包括你 import 的第三方库）的随机序列都跟着变，多线程更是没法复现。新代码一律 <code class="inl">default_rng(种子)</code>：每个生成器自带独立状态，像人手一个遥控器，互不干扰。见到老接口要认识，写新代码别再用。</p></div>
+<div class="box warn"><span class="t">新旧接口</span><p>老代码里的 <code class="inl">np.random.seed(0)</code> + <code class="inl">np.random.rand(3)</code> 使用共享的全局随机状态；程序中其他也使用这套接口的代码会影响后续序列。新代码可用 <code class="inl">default_rng(种子)</code> 创建独立生成器，减少不同组件之间的状态干扰。固定种子有助于复现实验，但跨库、跨版本或不同硬件的完整训练结果仍不保证完全一致。</p></div>
 <div class="cell"><div class="bar"><span>npio.py</span><span class="cp">复制</span></div><pre><code>a = np.arange(6).reshape(2, 3)
 np.save("arr.npy", a)          # ①
 b = np.load("arr.npy")         # ②
@@ -1429,7 +1449,8 @@ rng = np.random.default_rng(42)   # ③ 新接口
 rng.random(2)                     # ④ 独立生成器，种子自带</code></pre></div>
 <p>①② 全局 seed 像全屋总闸：你 import 的任何库调一次 <code class="inl">np.random.xxx</code>，你的随机序列就断了，复现性无从谈起；多进程下更是彻底不可复现。③④ 新式 Generator 自带独立状态，种子跟人走，函数式风格。新代码一律 ③④，见 2.14。</p>
 <div class="box ok"><span class="t">十坑速查</span><p>① 切片连坐 → 要隔离先 <code class="inl">.copy()</code>；② 链式赋值无效 → 一步索引到位；③ 原地方法返回 None → 函数版返回新数组；④ 广播方向不对 → 检查 shape 补 <code class="inl">[:, None]</code>；⑤ 广播爆炸 → 先算结果 shape；⑥ 整数回绕 → 大数用 int64；⑦ 浮点比较 → isclose；⑧ NaN 传染 → nan 系函数 + isnan；⑨ astype 截断 → 先 round；⑩ 全局随机 → default_rng。</p></div>
-<p>到这里，NumPy 的地基打完了。往后的 pandas PART 里你会看到 DataFrame 的每个单元格背后都是 ndarray；PyTorch PART 里你会发现 Tensor 连「坑」都和这章的十大坑一脉相承。卡住的时候翻回来，2.5 / 2.7 / 2.8 三节永远值得重读。</p>
+<p>到这里，NumPy 的地基打完了。往后的 pandas 和 PyTorch 会复用不少数组操作，但两者也各有自己的索引、类型和设备规则；遇到差异时以对应章节为准。</p>
+<div class="box tip"><span class="t">练习与自检</span><p>1. 对 shape 为 <code class="inl">(3, 4)</code> 的数组分别沿 axis=0、axis=1 求和，先写出预期 shape 再运行。2. 用布尔掩码选出大于均值的元素。3. 取一个切片并修改它，再用 <code class="inl">np.shares_memory</code> 检查共享关系。</p><p><b>检查：</b>能解释广播是否兼容、归约后哪一维消失，以及布尔索引与基本切片的内存行为差异。</p></div>
 <h2 class="sec" id="part3" data-nav="PART 3 · pandas 数据处理">PART 3 · pandas 数据处理</h2>
 <p class="lead">你可以先把 DataFrame 想成「带行标签、列标签的二维数组」，但它又比 NumPy 数组多一条关键能力：<b>每一列可以有自己独立的 dtype</b>。所以名字可以是字符串，分数可以是整数，日期可以是时间类型，它们仍能住在同一张表里。</p>
 <p>记住一句话：<b>pandas 的所有操作，几乎都是在「按标签对齐」这一个原则上演变出来的</b>。取数看标签，运算看标签，合并看标签；你后面遇到的很多「结果怎么对不上」，本质上都是标签没有对齐。</p>
@@ -2156,7 +2177,7 @@ typed["team"].cat.as_ordered()             # ⑥</code></pre></div>
 # safe[safe["team"] == "A"]["score"] = 100  # ①
 safe.loc[safe["team"] == "A", "score"] = 100  # ②
 safe.loc[safe["team"] == "A", "score"]     # =&gt; 0 100, 1 100, 4 100</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>先布尔筛选再取列，中间可能得到副本，最后赋值就落在临时对象上。pandas 有时会给 SettingWithCopyWarning，有时结果又看似正常，最稳妥的办法是根本不用这种两步赋值。</p></div><div class="xi"><span class="xn">②</span><p>一次 <code class="inl">loc</code> 同时指定行条件和列标签，赋值目标明确落回 safe。pandas 不需要猜中间对象是视图还是副本，因此结果和警告都不再含糊。</p></div></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>不要依赖链式赋值修改原表。pandas 3.0 的 Copy-on-Write 下，这种写法不会回写原对象；较早版本的视图/副本行为也不应依赖，警告情况因版本和上下文而异。</p></div><div class="xi"><span class="xn">②</span><p>一次 <code class="inl">loc</code> 同时指定行条件和列标签，清楚表达要修改的对象，是跨版本更可靠的写法。</p></div></div>
 <p><b>坑 2：把 <code class="inl">df[0]</code> 当成第一行</b></p>
 <div class="cell"><div class="bar"><span>pit_bracket_zero.py</span><span class="cp">复制</span></div><pre><code># df[0]                                   # ①
 by_label = df.loc[0, "name"]              # ②
@@ -2222,6 +2243,7 @@ relabelled = pd.concat([a, b], ignore_index=True)  # ②
 relabelled.shape                         # =&gt; (4, 4)</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>两段数据原本索引都是 0、1，concat 默认原样保留，于是新表出现重复行标签。重复标签不代表记录一定是重复业务数据，但后续 loc[0] 会一次返回多行。</p></div><div class="xi"><span class="xn">②</span><p>ignore_index 只把标签重排为 0、1、2、3，4 条记录原样保留。若你的目标是去重，应明确按业务键使用 drop_duplicates，而不是指望重编号替你删数据。</p></div></div>
 <div class="box ok"><span class="t">最后一张排错清单</span><p>结果为空，先查标签和缺失比较；行数变多，先查 merge 键重复；赋值没生效，先查链式赋值和 inplace；新列对不上，先查结果长度与索引。 pandas 很少「莫名其妙」，多数时候它只是在严格执行标签对齐和形状规则。</p></div>
+<div class="box tip"><span class="t">练习与自检</span><p>1. 从示例表中筛出分数至少 85 的学生。2. 按 team 汇总人数与平均分。3. 将汇总结果和另一张含 team 信息的小表合并，并用 <code class="inl">validate</code> 声明预期的键关系。</p><p><b>检查：</b>能解释 <code class="inl">loc</code> 与 <code class="inl">iloc</code> 的区别、Series 如何按索引对齐，以及 merge 后行数变化是否合理。</p></div>
 <h2 class="sec" id="part4" data-nav="PART 4 · PyTorch 深度学习">PART 4 · PyTorch 深度学习</h2>
 <p class="lead">Tensor 一句话定义：<b>能自动求导 + 能上 GPU 的 ndarray</b>。你在 PART 2 里练的 shape、广播、切片、归约，在 PyTorch 里几乎原样能用，所以 NumPy 越熟这章越轻松。真正多出来的能力就两个：一是每个运算都会被记进一张「计算图」，回头能自动帮你算梯度（autograd）；二是数据能整体搬进 GPU 并行计算（device）。</p>
 <p>这一章你要建立的第二信念：<b>看懂深度学习代码 = 看懂每一步的张量形状变化</b>。再吓人的模型也是一条流水线：数据以 (batch, ...) 进来，一层层加工，最后变成 (batch, n_classes) 的打分。看不懂哪一行，先问「这行的 shape 是多少」，十有八九就通了。本章所有示例都把形状标在注释里，请照着这个习惯写代码。</p>
@@ -2252,7 +2274,7 @@ torch.randint(0, 10, (2, 3))         # [0, 10) 随机整数，shape 传元组</c
 <div class="xp"><div class="xi"><span class="xn">①</span><p>torch.tensor() 从现成的 Python / NumPy 数据创建，数据会被<b>拷贝</b>一份（和 4.3 的 from_numpy 正相反）。整数数据推断为 int64。</p></div></div>
 <p>② zeros / ones / empty 这一族接收「拆开的维度」：zeros(2, 3) 而不是 zeros((2, 3))。empty 是「只分内存不填值」，里面是残留垃圾——图快，但你必须马上往里写东西。</p>
 <p>③ rand = uniform「均匀分布」，值域 [0, 1)，常用来造随机掩码、随机划分数据。</p>
-<p>④ randn = rand + normal「正态分布」，均值 0 方差 1。神经网络初始化几乎全用 randn（正态分布更适合打破对称性），记法：<b>n = normal</b>。把 randn 当 rand 用，初始权重全挤在 0~1，训练会莫名变慢还查不出原因。</p>
+<p>④ randn 从标准正态分布采样，均值 0、标准差 1；rand 从 [0,1) 均匀分布采样。二者适合不同用途。神经网络层通常有专门的初始化策略（例如 Linear 默认使用 Kaiming uniform），不要把 randn 当作通用权重初始化方案。</p>
 <div class="cell"><div class="bar"><span>create2.py</span><span class="cp">复制</span></div><pre><code>x = torch.rand(3, 4)
 torch.zeros_like(x)        # ① =&gt; 同 shape 同 dtype 的全 0
 torch.randn_like(x)        # 同理，正态版
@@ -2297,7 +2319,7 @@ torch.empty(2, 5)          # ② 未初始化，值是内存垃圾</code></pre><
   <text x="320" y="160" font-size="11" fill="#6b7280">多花一份内存，但行为可预期</text>
 
   <!-- 行 3: .numpy -->
-  <text x="24" y="196" font-size="11.5" font-weight="700" fill="#b91c1c">③ t.numpy() —— CPU 上共享；GPU 上自动拷贝</text>
+  <text x="24" y="196" font-size="11.5" font-weight="700" fill="#b91c1c">③ t.numpy() —— CPU 张量可共享内存</text>
   <rect x="24" y="204" width="120" height="34" rx="5" fill="#fef2f2" stroke="#dc2626"/>
   <text x="84" y="226" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">tensor t（CPU）</text>
   <rect x="180" y="204" width="120" height="34" rx="5" fill="#eff6ff" stroke="#3b82f6"/>
@@ -2309,10 +2331,10 @@ torch.empty(2, 5)          # ② 未初始化，值是内存垃圾</code></pre><
 
   <!-- 安全写法 -->
   <rect x="20" y="256" width="690" height="34" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
-  <text x="36" y="278" font-size="12" fill="#166534"><tspan font-weight="700">万能安全写法：</tspan><tspan font-family="monospace">arr = t.detach().cpu().numpy()</tspan> 　　<tspan fill="#4b5563">（断梯度 → 搬 CPU → 转 numpy，画图/保存/打印都用它）</tspan></text>
+  <text x="36" y="278" font-size="12" fill="#166534"><tspan font-weight="700">常用转换：</tspan><tspan font-family="monospace">arr = t.detach().cpu().numpy()</tspan>　<tspan fill="#4b5563">（CPU 上可能共享内存；需要独立副本时再 copy）</tspan></text>
 </svg>
   </div>
-  <div class="note"><b>三句话记住：</b>① <code>from_numpy</code> 和 CPU 上的 <code>.numpy()</code> 是<b>零拷贝</b>，快但危险；② <code>torch.tensor(x)</code> 才是真正的拷贝；③ 只要是为了「看数值 / 画图 / 存文件」，一律 <code>.detach().cpu().numpy()</code> 或 <code>.item()</code>。</div>
+  <div class="note"><b>三句话记住：</b>① 兼容的 <code>from_numpy</code> 和 CPU 张量的 <code>.numpy()</code> 通常共享内存；GPU 张量需先搬到 CPU，带梯度的张量需先 detach。② <code>torch.tensor(x)</code> 会复制数据。③ 需要独立修改的 NumPy 副本时，用 <code>t.detach().cpu().numpy().copy()</code>。</div>
 </div>
 <div class="cell"><div class="bar"><span>nptensor.py</span><span class="cp">复制</span></div><pre><code>import numpy as np, torch
 a = np.ones(3)
@@ -2325,9 +2347,9 @@ t3 = t1.numpy()               # ③ 反向转换，同样共享
 t4 = t1.clone()               # ④ 独立副本</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>from_numpy 是「零拷贝搬家」：tensor 直接骑在 numpy 数组的内存上，不开新仓库。a 一改 t1 就变——省内存，但如果你后面悄悄改了 a，训练数据就神不知鬼不觉地变了。顺带注意：numpy 默认 float64，from_numpy 不会帮你转成 float32，喂模型前记得 .float()。</p></div></div>
 <p>② torch.tensor() 是「拷贝搬家」：新开一块内存把数据抄进去。安全但多花一份内存和时间，想省这一步就得清楚自己在干什么。</p>
-<p>③ .numpy() 反着搬回 NumPy，规则同样是共享内存。注意 requires_grad=True 的张量不能直接 .numpy()（会报错），要先用 .detach().numpy() 脱离计算图再转。</p>
+<p>③ CPU 上且不需要梯度的张量可调用 <code class="inl">.numpy()</code>；返回数组通常与张量共享内存。GPU 张量先 <code class="inl">.cpu()</code>，带梯度的张量先 <code class="inl">.detach()</code>。若后续要独立修改数组，再接 <code class="inl">.copy()</code>。</p>
 <p>④ clone() 是「我要一份独立的」：新内存、逐元素复制，之后两边互不干扰。要把张量送去画图、导出又怕被后续操作污染，clone 一下最稳。</p>
-<div class="box warn"><span class="t">共享内存速查</span><p>共享内存：from_numpy、.numpy()、.detach()（还有 4.5 的 view / expand）。拷贝：torch.tensor(a)、.clone()、非连续时的 .contiguous()。拿不准就改一边、print 另一边试试，五秒钟的事情。</p></div>
+<div class="box warn"><span class="t">共享内存速查</span><p>通常共享内存：兼容的 from_numpy、CPU 张量的 .numpy()、.detach()（还有 4.5 的 view / expand）。会复制：torch.tensor(a)、.clone()；非连续张量调用 .contiguous() 时会复制，已连续时则可返回原张量。需要确认时可用小数组做实验。</p></div>
 <h3 id="p4-4" data-hot="1" data-nav="4.4 shape 操作大全">shape 操作大全<span class="badge hot">重点</span></h3>
 <p>深度学习代码里一半的行都在「掰形状」：把数据掰成层要求的形状、把多个张量拼起来、把多余的维度压掉。这一节是你的形状工具箱，其中 cat/stack 和 expand/repeat 是两对最容易混的兄弟。</p>
 <div class="fig" id="fig-catstack">
@@ -2776,11 +2798,12 @@ nn.CrossEntropyLoss()(logits, target)        # ③ =&gt; tensor(0.2413)
 probs = torch.softmax(logits, dim=1)         # ④
 nn.CrossEntropyLoss()(probs, target)         # ⑤ =&gt; tensor(0.7017)  ❌ 已失真</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>logits 是模型最后一层的原始输出——「每类多少分」，可正可负、不用归一化。Linear 的输出天然就是它。</p></div></div>
-<p>② target 是类别的<b>整数下标</b>而不是 one-hot，形状 (N,)，dtype 必须是 long。CrossEntropyLoss 帮你省掉了做 one-hot 的麻烦，直接给类别编号就行。</p>
+<p>② 这里使用类别索引作为 target：形状为 (N,)，dtype 为 long。CrossEntropyLoss 也支持与 logits 同形状的类别概率 target；初学分类时，通常使用整数类别索引即可。</p>
 <p>③ CrossEntropyLoss = LogSoftmax + NLLLoss 的<b>合体</b>：归一化它内部自己做。手算验证：−log(e² / (e² + e^0.5 + e⁻¹)) ≈ 0.2413，对得上。所以喂原始 logits 就是正确用法。</p>
-<p>④⑤ 这是标准错误现场：先自己 softmax 再喂进去，等于归一化做了两遍——概率被压得更平，损失从 0.24 虚高到 0.70，梯度全错，网络学不动还<b>不报任何错</b>，你只能盯着指标干瞪眼。</p>
-<div class="box bad"><span class="t">喂 softmax 后的概率给 CrossEntropyLoss</span><p>bad：<code class="inl">loss = criterion(torch.softmax(logits, 1), y)</code> —— 不报错，只报指标：loss 下不去、准确率上不来。</p><p>正确：<code class="inl">loss = criterion(logits, y)</code>。想看概率可以单独 <code class="inl">torch.softmax(logits, 1)</code>，但别把结果接回损失。</p></div>
+<p>④⑤ 这是常见误用：CrossEntropyLoss 会把输入解释为 logits 并在内部计算 log-softmax。若先把 logits 转成概率再传入，概率会被当作新的 logits 重新归一化，通常会改变损失与梯度；调用仍可能成功，因此应把原始 logits 传给分类损失。</p>
+<div class="box bad"><span class="t">把 softmax 概率传给 CrossEntropyLoss</span><p>不推荐：<code class="inl">loss = criterion(torch.softmax(logits, 1), y)</code>。这里损失函数会把这些概率数值当作 logits 处理。</p><p>常见分类写法：<code class="inl">loss = criterion(logits, y)</code>。需要展示概率时，单独计算 <code class="inl">torch.softmax(logits, 1)</code>。</p></div>
 <p>其他损失一句话带过：回归用 MSELoss；二分类 / 多标签用 BCEWithLogitsLoss——注意 WithLogits 这个词根，它同样是「sigmoid 我来做，你别做」。规律：<b>PyTorch 的损失函数喜欢「半成品」输入</b>，把归一化留给自己，因为 log-sum-exp 合并计算在数值上更稳，不容易上溢下溢。</p>
+<div class="box tip"><span class="t">术语澄清</span><p>严格来说，CrossEntropyLoss 对 logits 计算的是 <code class="inl">log_softmax</code> 与负对数似然，不是把 softmax 运算机械地做两遍。把 softmax 概率传入仍不合适，因为损失会把概率值重新当作 logits。</p></div>
 <h3 id="p4-11" data-nav="4.11 优化器与调度器">优化器与调度器</h3>
 <p>优化器的工作就一句话：<b>拿着 .grad 里的梯度，按规则更新参数</b>。调度器决定「学习率这个步子，训练到后期要不要变小」。这节重点是分清三个动作：zero_grad、step、scheduler.step——名字像，频率和职责完全不同。</p>
 <div class="cell"><div class="bar"><span>optimizer.py</span><span class="cp">复制</span></div><pre><code>import torch, torch.nn as nn
@@ -2795,7 +2818,7 @@ opt.zero_grad()          # ⑤ 清梯度</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>SGD + momentum：沿负梯度方向走，momentum 再叠加「上一步的惯性」，像小球滚下坡——越滚越快，还不容易被小坑绊住。学习率 lr 是步长：太大震荡发散，太小龟速爬行。</p></div></div>
 <p>② Adam / AdamW：自适应学习率，按每个参数梯度的历史幅度自动调步长。<b>懒得调参就用 Adam，默认 lr=1e-3 能跑通绝大多数小项目</b>；追求极限精度再回头折腾 SGD + momentum。</p>
 <p>③ backward 只负责「算梯度、写进 .grad」，<b>它不更新任何参数</b>。很多人以为 backward 之后模型就变了——没有，参数更新是下一步的事，这是初学者最常见的认知错位。</p>
-<p>④ step 才是「真更新」：遍历所有参数做 p.data -= lr * p.grad。到这一步，模型权重才真正变了一点点。</p>
+<p>④ step 才是「真更新」：优化器依据参数梯度和自身状态更新参数；更新过程由 PyTorch 在不追踪梯度的上下文中完成。通常直接调用优化器即可，不要在用户代码里通过 <code class="inl">p.data</code> 手动改参数。</p>
 <p>⑤ 上一轮的梯度在 .grad 里赖着不走（4.7 讲过：梯度是累加的），不清零就会混进新梯度。三个动作的铁三角顺序背下来：<b>zero_grad → (forward + backward) → step</b>。</p>
 <div class="cell"><div class="bar"><span>sched.py</span><span class="cp">复制</span></div><pre><code>opt = torch.optim.SGD(model.parameters(), lr=0.1)
 sched = torch.optim.lr_scheduler.StepLR(opt, step_size=3, gamma=0.1)   # ①
@@ -2827,7 +2850,7 @@ xb.shape                                   # =&gt; torch.Size([32, 4])</code></p
 <div class="xp"><div class="xi"><span class="xn">①</span><p>继承 Dataset 只需实现两个方法，DataLoader 就认识你了——框架不问你是什么出身，只问你有没有这两个方法，典型的鸭子类型。</p></div></div>
 <p>② __len__ 告诉框架数据集总共多少条：len(loader) 算批数、shuffle 划范围，全靠它。</p>
 <p>③ __getitem__ 定义「取第 i 条返回什么」。<b>只返回单条</b>（一个 (特征, 标签) 元组），攒 batch 是 DataLoader 的事。读图片、分词这些重活都发生在这里——它每个样本被调用一次，是你控制数据质量的地方。</p>
-<p>④ 四个高频参数：batch_size 攒多大一批；shuffle 每个 epoch 重新洗牌（训练集必开，否则模型会记住样本顺序）；drop_last 丢掉不满的尾巴批——100 条按 32 攒出 3 批加 4 条残批，drop_last=True 扔掉残批。为什么扔：BatchNorm 对 batch 大小敏感，最后一个 4 条的小批会扰乱统计。</p>
+<p>④ 四个高频参数：batch_size 决定每批大小；shuffle 常用于独立同分布的训练样本，但时间序列等任务应按任务需要保留顺序；drop_last=True 会丢掉不满一批的尾部样本。100 条按 32 分批时会丢掉最后 4 条。需要固定批大小，或避免 BatchNorm 遇到过小的末批（尤其只有 1 条）时，可以考虑开启它；否则应评估丢弃数据是否合适。</p>
 <p>⑤ iter + next 偷看第一批——调试时确认数据形状的标准姿势。默认 collate 把 32 条 (4,) 的特征 stack 成 (32, 4)：<b>单条形状的前面拼上 batch 维就是批形状</b>，用这条规则反推，各种 (N, L, d) 一眼看穿。</p>
 <p>num_workers：开子进程并行执行 __getitem__（读图、解码最耗时的部分），让数据加载和 GPU 计算流水线化。但在 Windows / Jupyter 里 num_workers&gt;0 必须把训练代码放进 if __name__ == '__main__': 保护块，否则子进程重新导入主脚本，轻则报错重则卡死。CPU 小数据集直接用默认 0 最省心。</p>
 <div class="box tip"><span class="t">collate_fn 是干什么的</span><p>默认 collate 把一批「单条样本」stack 成批张量。样本形状不一（比如句子长短不同）就得自定义：给 DataLoader 传 collate_fn=你的函数，在函数里做 padding 或干脆返回列表。</p></div>
@@ -2953,7 +2976,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)</code></pre></div>
 <p>⑧ 五步之「更新」：优化器按 .grad 走一步，参数真的变了。<b>④⑤⑥⑦⑧ 的顺序是死的</b>，背下来：清零 → 前向 → 损失 → 反向 → 更新。</p>
 <p>⑨ 验证第一开关：eval 模式关 Dropout、BatchNorm 改用训练攒下的全局统计量。验证要看模型的「真实水平」，推理形态才是真实水平。</p>
 <p>⑩ 验证第二开关：no_grad 区内不建图不记账，显存省一半、速度快一截。<b>eval() 管层的行为，no_grad 管要不要梯度，俩开关管的事不同，评估时必须一起开</b>。里面是纯前向加数数：argmax(1) 把 logits 变预测类别，.sum().item() 把结果变 Python 数字。</p>
-<p>跑起来五个 epoch，val_acc 通常从 0.5 左右爬到 0.9 以上（数据随机，数字会浮动）——第一次亲眼看着一个网络在自己手里学会分类，就是这一刻。</p>
+<p>运行示例后观察 loss 和验证准确率的变化。由于随机初始化、数据划分和软件环境不同，具体数值会变化；不要把下面的一次运行结果当作必须达到的指标。</p>
 <pre class="out">epoch 0  val_acc = 0.900
 epoch 1  val_acc = 0.950
 epoch 2  val_acc = 0.950
@@ -2962,6 +2985,7 @@ epoch 4  val_acc = 1.000
 （随机数据，你的数字会略有不同）</pre>
 <div class="box ok"><span class="t">五步口诀</span><p><b>取数据 → 前向 → 算 loss → 反向 → 更新</b>（zero_grad → forward → loss → backward → step）；训练 model.train()，验证 model.eval() + torch.no_grad()。这两句话能对上号，任何训练代码你都能逐行对号入座。</p></div>
 <p>三个常见变体，见名知意即可：混合精度（torch.autocast + GradScaler，用半精度换速度）；梯度裁剪（nn.utils.clip_grad_norm_，RNN / Transformer 防梯度爆炸，放 backward 之后 step 之前）；早停（验证指标连续几轮不涨就 break，配合 torch.save 存最优）。</p>
+<div class="box tip"><span class="t">练习与自检</span><p>1. 给训练循环每一步打印一次输入、logits 和标签的 shape。2. 在验证循环中检查预测张量是否需要梯度。3. 用同一个模型分别运行 <code class="inl">train()</code> 和 <code class="inl">eval()</code>，解释 Dropout/BatchNorm 可能出现的差别。</p><p><b>检查：</b>能按顺序说明清梯度、前向、损失、反向和参数更新各自做什么；能区分模型模式与梯度追踪。</p></div>
 <h3 id="p4-14" data-nav="4.14 GPU 与设备管理">GPU 与设备管理</h3>
 <p>GPU 跑得飞快的前提是：<b>模型和数据都在 GPU 上</b>。「在哪算」由张量的 device 属性说了算，CPU 张量和 GPU 张量互相碰面会直接报错。这节的核心是「搬运的时机」——什么时候搬一次，什么时候每批都搬。</p>
 <div class="cell"><div class="bar"><span>device.py</span><span class="cp">复制</span></div><pre><code>import torch
@@ -2982,9 +3006,9 @@ logits.cpu()                           # ⑤</code></pre></div>
 <p>训练几小时的成果就是模型里那堆参数数字。保存就是「把参数抄下来」，加载就是「按原样贴回去」。关键抉择：存参数字典（state_dict）还是存整个模型对象——前者是官方钦定的标准做法，后者换台机器就翻脸。</p>
 <div class="cell"><div class="bar"><span>save.py</span><span class="cp">复制</span></div><pre><code>import torch, torch.nn as nn
 torch.save(model.state_dict(), 'best.pt')               # ①
-state = torch.load('best.pt', map_location=device)      # ②
+state = torch.load('best.pt', map_location=device, weights_only=True)  # ②
 model2 = nn.Sequential(nn.Linear(16, 64), nn.ReLU(),
-                       nn.Linear(64, 2))                # ③
+                       nn.Linear(64, 2)).to(device)     # ③
 model2.load_state_dict(state)                           # ④
 model2.eval()                                           # ⑤</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>state_dict 是「参数名 → 参数张量」的字典（比如 '0.weight'、'0.bias'）。save 它 = 只抄数字，体积小、和代码结构解耦——<b>这是标准做法</b>。</p></div></div>
@@ -2992,7 +3016,7 @@ model2.eval()                                           # ⑤</code></pre></div>
 <p>③ 加载前必须先<b>建一个结构一模一样的空模型</b>——state_dict 只有数字，不含「模型长什么样」的信息。这就是为什么加载代码总要先重建模型。</p>
 <p>④ 把字典灌进模型，参数逐个归位。形状对不上会报 size mismatch——别嫌它烦，这是在帮你拦住「结构写错」的事故。</p>
 <p>⑤ 加载完别忘了 eval()：state_dict 只存参数、<b>不存模式</b>——保存时如果是 train 模式，加载回来 Dropout 就还开着。推理前三连：建模型 → load → eval。</p>
-<div class="box warn"><span class="t">别用 torch.save(model) 存整个模型</span><p>能跑，但它是 pickle 序列化：把「类定义所在的文件路径」也记了进去。换个目录、改个类名、换台机器，torch.load 直接报错找不到类。存 state_dict + 手动建模型，才是能活着走出这台电脑的保存方式。</p></div>
+<div class="box warn"><span class="t">优先保存 state_dict</span><p>保存整个模型会依赖 pickle 和原有 Python 类定义，迁移代码或环境时更脆弱；加载不可信的 pickle 文件也有安全风险。通常保存 <code class="inl">state_dict</code>，重建模型结构后加载，并对可信来源的权重使用 <code class="inl">weights_only=True</code>。只有在受控环境且清楚序列化依赖时，才考虑保存整个模型对象。</p></div>
 <p>断点续训补一句：要恢复训练，优化器状态和当前 epoch 也得一起存——字典打包 {'model': model.state_dict(), 'opt': optimizer.state_dict(), 'epoch': epoch}，恢复时逐个 load 回去，学习率和动量才不会归零重来。</p>
 <h3 id="p4-16" data-nav="4.16 PyTorch 十大坑">PyTorch 十大坑</h3>
 <p>每个坑都来自真实翻车现场。套路统一：错误写法 + 正确写法 + 几句讲解。它们最阴的地方在于：<b>大多不报错，或者报错信息极具迷惑性</b>，等你发现时已经浪费了几小时。</p>
@@ -3240,7 +3264,8 @@ y = np.sin(x)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 ax1.plot(x, y, '-o', markersize=4)                        # ①
-ax2.scatter(x, y + np.random.randn(50) * 0.1,
+rng = np.random.default_rng(0)
+ax2.scatter(x, y + rng.normal(size=50) * 0.1,
             s=30, alpha=0.6)                              # ②</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>折线图：x 传连续自变量（时间、epoch、温度），点之间自动连线。它回答「这个量随 x 怎么变」。'-o' 是 5.3 的 fmt 缩写，markersize=4 把点缩小，点密时不显拥挤。</p></div><div class="xi"><span class="xn">②</span><p>散点图：x、y 是两列配对数据，一个点一个样本，不连线。它回答「这两个变量有没有关系」。s 是点的大小、alpha 是透明度——点数上千时不调 alpha 会糊成一团，看不出疏密。</p></div></div>
 <div class="cell"><div class="bar"><span>bars_hist.py</span><span class="cp">复制</span></div><pre><code>cats = ['mlp', 'cnn', 'rnn']
@@ -3259,6 +3284,7 @@ g2 = rng.normal(70, 5, 100)
 fig, axes = plt.subplots(1, 4, figsize=(14, 3))
 axes[0].pie([45, 30, 25], labels=['A', 'B', 'C'], autopct='%.1f%%')   # ①
 axes[1].boxplot([g1, g2])
+axes[1].set_xticks([1, 2])
 axes[1].set_xticklabels(['g1', 'g2'])                                 # ②
 axes[2].errorbar([0, 1], [g1.mean(), g2.mean()],
                  yerr=[g1.std(), g2.std()], fmt='o', capsize=5)       # ③
@@ -3385,7 +3411,7 @@ sec.set_xlabel('step')                                   # ②</code></pre></div
 <div class="xp"><div class="xi"><span class="xn">①</span><p>secondary_xaxis 在图的顶边再加一条 x 轴。functions 传一对换算函数：正向（epoch → step，1 轮 = 500 步）决定上面那条轴的刻度标在哪，反向（step → epoch）用于交互取值时的换算。训练曲线「横轴同时标 epoch 和 step」就靠它，不用画两遍图。</p></div><div class="xi"><span class="xn">②</span><p>新轴也是正经的 Axis 对象，set_xlabel 照常用。同理还有 secondary_yaxis('right')，给 y 轴加第二把尺子（比如摄氏 ↔ 华氏）。</p></div></div>
 <div class="box warn"><span class="t">sharex 和 twinx 别混</span><p>subplots(sharex=True) 是「多个子图共用一根轴」，管的是排版对齐；twinx 是「同一个子图里再画一根 y 轴」，管的是量纲不同。两指标量级差一个数量级 → twinx；多张小图对齐横轴 → sharex。完全两码事。</p></div>
 <h3 id="p5-8" data-nav="5.8 中文显示">中文显示</h3>
-<p>标题一写中文就是一排方块 □□□□——这是每个人第一次用 Matplotlib 画中文图的必经之路。为什么必须配置：Matplotlib 自带的默认字体只有 DejaVu Sans 一族，一个汉字字形都没有；渲染器查不到码位，只能画个「豆腐块」占位，而且不报错、只是丑，特别容易一路带进报告里。</p>
+<p>如果当前 Matplotlib 环境没有可用的中文字形，标题可能显示成方块。字体是否可用取决于操作系统、已安装字体和 Matplotlib 的字体缓存；先检查当前环境，再选择实际存在的字体。</p>
 <div class="cell"><div class="bar"><span>chinese_setup.py</span><span class="cp">复制</span></div><pre><code>plt.rcParams['font.sans-serif'] = ['SimHei']       # ①
 plt.rcParams['axes.unicode_minus'] = False         # ②
 
@@ -3394,7 +3420,7 @@ fig, ax = plt.subplots()
 ax.plot(x, np.sin(x))
 ax.set_title('训练损失曲线')                        # ③
 ax.set_xlabel('轮次'); ax.set_ylabel('损失值')</code></pre></div>
-<div class="xp"><div class="xi"><span class="xn">①</span><p>rcParams 是 Matplotlib 的全局配置字典，这行把默认无衬线字体链的队首换成 Windows 自带的黑体 SimHei。注意值必须是列表——它是一条候选链，队首找不到就依次往后试，所以写 ['SimHei', 'Microsoft YaHei'] 更稳。</p></div><div class="xi"><span class="xn">②</span><p>黑体里没有 Unicode 减号（U+2212）的字形，配完字体后负数刻度反而变成方块。这行让 Matplotlib 改用普通 ASCII 连字符 '-' 代替负号。两行必须成对出现——只配字体忘了负号，是最常见的半吊子配置。</p></div><div class="xi"><span class="xn">③</span><p>现在中文正常渲染了。这两行 rcParams（加上 import 共三行）建议直接放在每个脚本的最开头，改的是全局配置，写一次整个脚本生效。</p></div></div>
+<div class="xp"><div class="xi"><span class="xn">①</span><p>rcParams 是 Matplotlib 的全局配置字典。<code class="inl">font.sans-serif</code> 接收候选字体列表；列表中的字体必须已安装并被 Matplotlib 找到。SimHei 和 Microsoft YaHei 常见于部分 Windows 环境，但不保证每台机器都有。</p></div><div class="xi"><span class="xn">②</span><p>若当前字体缺少 Unicode 减号字形，可将 <code class="inl">axes.unicode_minus</code> 设为 False，让刻度使用普通连字符。是否需要这项设置取决于所用字体。</p></div><div class="xi"><span class="xn">③</span><p>配置在当前 Python 进程中生效。确认字体加载成功后再导出图像；跨平台脚本应检测已安装字体或提供字体文件，而不要假设某个字体名处处可用。</p></div></div>
 <p>配了字体还报 findfont 警告，先查机器上到底有什么字体：</p>
 <div class="cell"><div class="bar"><span>list_fonts.py</span><span class="cp">复制</span></div><pre><code>from matplotlib import font_manager
 
@@ -3404,7 +3430,7 @@ len(names)                              # =&gt; 数量因机器而异
 <div class="xp"><div class="xi"><span class="xn">①</span><p>fontManager.ttflist 登记着 Matplotlib 能看到的所有字体文件。字体名匹配是精确的，'SimHei' 拼错一个字母就找不到，来这里核对拼写最快。</p></div><div class="xi"><span class="xn">②</span><p>环境里没有的字体写了也白写，会静默退回默认字体继续显示方块。服务器 / 容器里经常连一个中文字体都没装，那时要么装字体，要么用 FontProperties 从指定 .ttf 文件加载。</p></div></div>
 <p>各平台的常见中文字体名：</p>
 <table><tr><th>系统</th><th>可用的常见中文字体</th></tr><tr><td>Windows</td><td>'SimHei'（黑体）、'Microsoft YaHei'（雅黑）</td></tr><tr><td>macOS</td><td>'PingFang SC'、'Arial Unicode MS'</td></tr><tr><td>Linux</td><td>'WenQuanYi Micro Hei'（通常要手动装）</td></tr></table>
-<div class="box ok"><span class="t">无脑抄的配置，放脚本最顶上</span><p>plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'PingFang SC']</p><p>plt.rcParams['axes.unicode_minus'] = False</p><p>候选链把三大平台都兜住，同一份脚本在谁的机器上跑都不出方块。</p></div>
+<div class="box ok"><span class="t">配置示例</span><p><code class="inl">plt.rcParams['font.sans-serif'] = ['SimHei', 'Microsoft YaHei', 'PingFang SC']</code></p><p><code class="inl">plt.rcParams['axes.unicode_minus'] = False</code></p><p>这只是候选列表示例；请确认字体确实安装并被当前环境发现，不存在的字体不会自动下载。</p></div>
 <h3 id="p5-9" data-nav="5.9 pandas 直接画图">pandas 直接画图</h3>
 <p>DataFrame 自己就带一整套绘图接口，底层就是调 Matplotlib。它最大的价值：列名自动当图例文案、索引自动当横轴，一行顶手写四行，临时看数据极快。</p>
 <div class="cell"><div class="bar"><span>pandas_plot.py</span><span class="cp">复制</span></div><pre><code>import pandas as pd
@@ -3527,7 +3553,7 @@ fig, ax = plt.subplots()
 im = ax.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)   # ①
 fig.colorbar(im, ax=ax, shrink=0.8)                       # ②</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>vmin/vmax 手动钉死颜色映射的两端。相关性矩阵固定用 [-1,1]：不钉的话 Matplotlib 按当前数据的最小最大值自适应拉伸，两张图画出来颜色基准都不一样，跨图比较直接失效。</p></div><div class="xi"><span class="xn">②</span><p>colorbar 第一个参数必须传 im——imshow 的返回值上记着 cmap 和值域信息，色条靠它生成刻度；ax=ax 告诉色条从哪个子图旁边借位置，shrink=0.8 把色条缩短两成，纯排版。记住 imshow 和 colorbar 总是成对出现。</p></div></div>
-<div class="box bad"><span class="t">经典报错对照表</span><p>TypeError: Invalid shape (3, 96, 96) for image data → 忘了 permute 换轴</p><p>RuntimeError: Can't call numpy() on Tensor that requires grad → 忘了 detach</p><p>图整体发白 / 发灰 → float 值域不在 [0,1]：忘了反归一化，或忘了 /255</p></div>
+<div class="box bad"><span class="t">经典报错对照表</span><p>TypeError: Invalid shape (3, 96, 96) for image data → 图像通道还在第一维，需要 permute</p><p>RuntimeError: Can't call numpy() on Tensor that requires grad → 转换前 detach；GPU 张量还需先 cpu</p><p>图整体发白 / 发灰 → RGB 浮点值域不在 [0,1]：检查是否需要反归一化，或是否忘了 /255</p></div>
 <h3 id="p5-11" data-nav="5.11 深度学习实战图">深度学习实战图</h3>
 <p>零件都齐了：subplots（5.6）、装饰（5.4）、imshow（5.10）。这一节把它们拼成深度学习里出镜率最高的三张图：训练曲线、混淆矩阵、batch 网格图。</p>
 <div class="cell"><div class="bar"><span>train_curve.py</span><span class="cp">复制</span></div><pre><code>history = {'loss': [0.90, 0.60, 0.45, 0.40, 0.37],
@@ -3587,7 +3613,7 @@ fig.savefig('line.pdf')                                  # ③
 fig.savefig('logo.png', transparent=True)                # ④</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>dpi 是「每英寸多少像素」，决定位图的物理分辨率：像素数 = 英寸 × dpi，8 英寸 × 300 = 2400 像素宽。屏幕看 100~150 够，论文投稿一般要求 300。dpi 只对 png / jpg 这类位图有意义。</p></div><div class="xi"><span class="xn">②</span><p>bbox_inches='tight' 保存前重新计算边界、裁掉图外空白，长标签不会被切掉一角。代价是最终图的英寸数不再严格等于 figsize——需要精确尺寸的版面就别加。</p></div><div class="xi"><span class="xn">③</span><p>存 .pdf / .svg / .eps 得到矢量图：文件里记的是「线从哪画到哪」这类绘图指令而非像素网格，放大到任何倍数都不糊。同一个 fig 可以反复 savefig 成不同格式。</p></div><div class="xi"><span class="xn">④</span><p>transparent=True 把图外白底变透明，做幻灯片和网页贴图时不用抠图。图内的白色元素（箱线图填充等）不受影响。</p></div></div>
 <table><tr><th>格式</th><th>类型</th><th>用途</th></tr><tr><td>png</td><td>位图</td><td>日常默认，屏幕显示、聊天发图</td></tr><tr><td>jpg</td><td>位图（有损）</td><td>照片可以；曲线和文字会有毛边，别用</td></tr><tr><td>pdf / svg / eps</td><td>矢量</td><td>论文插图，无损缩放，可后期编辑</td></tr></table>
-<div class="box warn"><span class="t">savefig 的时机</span><p>savefig 保存的是调用那一刻的 fig。先 show 再 savefig，部分后端在 show 时会开新图，存出来一张空白。顺序永远是：画完 → savefig → show。dpi 也可以全局设：plt.rcParams['savefig.dpi'] = 300。</p></div>
+<div class="box warn"><span class="t">savefig 的时机</span><p>在脚本中，部分后端的阻塞式 <code class="inl">show()</code> 可能关闭或清空当前图；为避免保存空图，采用「画完 → savefig → show」最稳妥。Jupyter 通常会自动显示图，但保存仍应显式调用 <code class="inl">fig.savefig()</code>。dpi 也可以全局设：<code class="inl">plt.rcParams['savefig.dpi'] = 300</code>。</p></div>
 <h3 id="p5-13" data-nav="5.13 Matplotlib 常见坑">Matplotlib 常见坑</h3>
 <p>这些坑全都来自真实的报错和「图怎么不对劲」现场，每个给 bad / good 对照。前五个是深度学习日常高频款。</p>
 <p>坑 1：中文变方块</p>
@@ -3598,7 +3624,7 @@ ax.set_title('训练损失')
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 ax.set_title('训练损失')</code></pre></div>
-<p>默认字体 DejaVu Sans 没有任何中文字形，渲染器查不到码位就画豆腐块。它不报错、只是丑，所以最容易一路带进论文里。两行配置放脚本开头一次解决；第二行是给负号用的——SimHei 没有 Unicode 减号字形，不关掉它，负数刻度照样是方块。</p>
+<p>若当前 Matplotlib 环境没有可用中文字形，图中标题可能显示方块。字体配置必须指向已安装并被 Matplotlib 找到的字体；负号显示异常时，再考虑将 <code class="inl">axes.unicode_minus</code> 设为 False。</p>
 <p>坑 2：tensor 没换轴就 imshow</p>
 <div class="cell"><div class="bar"><span>pitfall_permute.py</span><span class="cp">复制</span></div><pre><code>t = torch.rand(3, 96, 96)
 
@@ -3669,6 +3695,7 @@ ax.plot(x, np.cos(x), label='val')
 ax.legend()</code></pre></div>
 <p>legend 的条目文案只有一个来源：画图时传的 label 参数。没传 label 的线会被分配 '_child0' 这类以下划线开头的内部名，而 legend 的设计约定就是忽略下划线开头的条目——这是为了让 axhline 等辅助线默认不进图例的机制。所以要么每条线都写 label，要么 legend(handles=[l1, l2], labels=['a', 'b']) 手动指定。</p>
 <div class="box ok"><span class="t">PART 5 收束</span><p>记住三件事就毕业了：① 一切画在 Axes 上，fig, ax = plt.subplots() 起手；② 显示张量前过五关——detach → cpu → permute → numpy → 反归一化；③ 中文两行配置写在脚本最开头。剩下的全是查参数的事。</p></div>
+<div class="box tip"><span class="t">练习与自检</span><p>用训练循环中的 loss 历史画出训练曲线和验证曲线，补上标题、坐标标签和图例，并保存为 PNG。再从 PyTorch 取一张图片，转换通道顺序后显示；若图像做过 Normalize，先反归一化。</p><p><b>检查：</b>能说明图画在哪个 Axes、tensor 转 NumPy 前需要满足什么条件，以及 RGB 图像的形状和值域要求。</p></div>
 <h2 class="sec" id="part6" data-nav="PART 6 · 附录">PART 6 · 附录</h2>
 <p class="lead">这一部分不是用来「学」的，是用来「查」的。变形、聚合、筛选、类型转换——这四件事四个库全都会干，只是各自起了不同的函数名。前面五个 PART 是竖着一条一条学的，这里把它们横着摆在同一张表里：四个库干同一件事的写法放在一张表里对照，背完前面再来横向串一遍，记忆就锁死了。查法统一：先看最左列「想干什么」锁定你的意图，再横着扫到你手头在用的那个库。6.1~6.4 是语法对照表，7.1~7.2 是使用说明书——先有表，再有计划和检查清单，这份附录就齐了。</p>
 <h3 id="p6-1" data-hot="1" data-nav="6.1 四库变形与拼接对照">四库变形与拼接对照<span class="badge hot">重点</span></h3>
@@ -3710,7 +3737,7 @@ df = pd.DataFrame({'score': [60, 70, 80, 90]}, index=['a', 'b', 'c', 'd'])   # �
 df.iloc[0:2]      # ② =&gt; 取到 a、b 两行，c 不在
 df.loc['a':'c']   # ③ =&gt; 取到 a、b、c 三行，c 在！</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>建一个带字符串索引的 DataFrame：四行，行标签是 a、b、c、d。标签和位置在这张表里故意错开一位，就为了让端点差异显形。</p></div><div class="xi"><span class="xn">②</span><p><code class="inl">iloc[0:2]</code> 按位置切：0 和 2 是「第 0 个、第 2 个位置」，左闭右开，取到第 0、1 两行——a 和 b，跟 Python 列表切片、NumPy 切片行为完全一致。</p></div><div class="xi"><span class="xn">③</span><p><code class="inl">loc['a':'c']</code> 按标签切：'a' 到 'c' 说的是「这三个名字」，闭区间，c 也在内。同一个「到 c 为止」，iloc 要写 <code class="inl">[0:3]</code> 才等价——数字对不上，这就是这对函数最容易翻车的地方。</p></div></div>
-<div class="box warn"><span class="t">条件赋值必须走 loc</span><p>想「把 c 列大于 5 的值改成 0」，写成 <code class="inl">df[df['c'] &gt; 5]['c'] = 0</code> 是无效的——先筛选再取列是两步链式操作，第二步改的是临时副本，原表纹丝不动，pandas 还会警告你。</p><p>正确写法是一步到位：<code class="inl">df.loc[df['c'] &gt; 5, 'c'] = 0</code>——行条件和列名在同一个方括号里，pandas 才知道你要改的是原表。</p></div>
+<div class="box warn"><span class="t">条件赋值写清目标对象</span><p>想「把 c 列大于 5 的值改成 0」，不要依赖 <code class="inl">df[df['c'] &gt; 5]['c'] = 0</code> 这样的链式赋值；它不会可靠地修改原表，警告表现也随 pandas 版本而异。</p><p>用一次索引明确表达赋值目标：<code class="inl">df.loc[df['c'] &gt; 5, 'c'] = 0</code>。</p></div>
 <h3 id="p6-4" data-nav="6.4 四库类型转换与互操作对照">四库类型转换与互操作对照</h3>
 <p>深度学习代码里，数据像流水一样在 list、ndarray、DataFrame、tensor 四种容器之间倒来倒去：读 csv 进来是 DataFrame，喂模型前要变 tensor，画 loss 曲线又得回 list。这节两张表：第一张查「怎么倒」，第二张查「倒的时候内存是共享还是拷贝」——第二张表管着「改一边、另一边莫名其妙也变了」这类灵异事件的真相。</p>
 <table><tr><th>想干什么</th><th>Python</th><th>NumPy</th><th>pandas</th><th>PyTorch</th></tr><tr><td>从 list 造对象</td><td><code class="inl">a = [1, 2]</code>（就是它自己）</td><td><code class="inl">np.array([1, 2])</code></td><td><code class="inl">pd.DataFrame({'c': lst})</code></td><td><code class="inl">torch.tensor([1, 2])</code></td></tr><tr><td>变回 list</td><td>—</td><td><code class="inl">a.tolist()</code></td><td><code class="inl">df['c'].tolist()</code></td><td><code class="inl">t.tolist()</code></td></tr><tr><td>变 ndarray</td><td>—</td><td>—（自己）</td><td><code class="inl">df.to_numpy()</code></td><td><code class="inl">t.detach().cpu().numpy()</code></td></tr><tr><td>变 DataFrame</td><td>—</td><td><code class="inl">pd.DataFrame(a, columns=[...])</code></td><td>—</td><td>—</td></tr><tr><td>变 tensor</td><td>—</td><td><code class="inl">torch.from_numpy(a)</code></td><td><code class="inl">torch.tensor(df.to_numpy())</code></td><td>—</td></tr><tr><td>单元素取 Python 数</td><td><code class="inl">a[0]</code></td><td><code class="inl">a[0].item()</code></td><td><code class="inl">df['c'].iloc[0]</code></td><td><code class="inl">t.item()</code></td></tr><tr><td>看 dtype</td><td><code class="inl">type(x)</code></td><td><code class="inl">a.dtype</code></td><td><code class="inl">df.dtypes</code></td><td><code class="inl">t.dtype</code></td></tr><tr><td>复制一份</td><td><code class="inl">a[:]</code> / <code class="inl">list(a)</code></td><td><code class="inl">a.copy()</code></td><td><code class="inl">df.copy()</code></td><td><code class="inl">t.clone()</code></td></tr><tr><td>转 float32</td><td><code class="inl">float(x)</code></td><td><code class="inl">a.astype('float32')</code></td><td><code class="inl">df['c'].astype('float32')</code></td><td><code class="inl">t.float()</code></td></tr><tr><td>转 int64</td><td><code class="inl">int(x)</code></td><td><code class="inl">a.astype('int64')</code></td><td><code class="inl">df['c'].astype('int64')</code></td><td><code class="inl">t.long()</code></td></tr><tr><td>搬到 GPU</td><td>—</td><td>—</td><td>—</td><td><code class="inl">t.to('cuda')</code></td></tr><tr><td>存到磁盘</td><td><code class="inl">json.dump</code></td><td><code class="inl">np.save</code></td><td><code class="inl">df.to_csv</code></td><td><code class="inl">torch.save</code></td></tr></table>
@@ -3727,15 +3754,15 @@ a[1] = -1.0                     # ⑤
 t2                              # =&gt; tensor([99., 2.])  不受影响</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>一个普通 NumPy 数组当靶子，两个「转 tensor」的候选人都在它身上做实验。</p></div><div class="xi"><span class="xn">②</span><p><code class="inl">from_numpy</code> 建立的 t 和 a 共享同一块内存——此刻它俩是同一份数据的两个名字。</p></div><div class="xi"><span class="xn">③</span><p>只改了 NumPy 这边：<code class="inl">a[0] = 99.0</code>。下一行的输出暴露真相：t 也变成了 <code class="inl">tensor([99., 2.])</code>——没写一行 torch 代码，张量自己变了。</p></div><div class="xi"><span class="xn">④</span><p><code class="inl">torch.tensor(a)</code> 在这一刻把 a 的值抄了一份：此刻 a 是 <code class="inl">[99, 2]</code>，所以 t2 生下来就是 <code class="inl">[99, 2]</code>，但从此和 a 断绝关系。</p></div><div class="xi"><span class="xn">⑤</span><p>再改 a 的第二个元素，a 变成 <code class="inl">[99, -1]</code>——t2 纹丝不动，还是 <code class="inl">tensor([99., 2.])</code>。一句话总结：from_numpy 是同一块内存两个名字，tensor 是各过各的。</p></div></div>
 <div class="box warn"><span class="t">灵异事件排查口诀</span><p>看到「没改张量但张量变了」「没改数组但数组变了」，第一反应查共享内存三件套：<code class="inl">from_numpy</code>、<code class="inl">t.numpy()</code>、<code class="inl">view</code>。</p><p>想断开共享，用 <code class="inl">t = t.clone()</code> 抄一份；数据只在初始化时用一次的，反而推荐 from_numpy，省一次拷贝。</p></div>
-<h3 id="p7-1" data-nav="7.1 七天背诵计划">七天背诵计划</h3>
-<p>背完不等于记住，记住需要按遗忘曲线复习。这份计划把前五个 PART 切成七天，每天 30~45 分钟：先读指定小节，再做当天的动手任务，最后 5 分钟把写不出来的小节重新默一遍。别从头到尾精读——精读第三天你就放弃了，背诵手册的用法是「过几遍、每遍更快」。</p>
-<table><tr><th>天</th><th>读哪几节</th><th>当天动手任务</th></tr><tr><td>Day 1</td><td>PART 1 的 1.1~1.7（Python 基础半场）</td><td>遮住代码默写：列表反转、带 if 的列表推导式、用 <code class="inl">zip</code> 把两个列表拼成字典</td></tr><tr><td>Day 2</td><td>PART 1 的 1.8~1.14（Python 进阶半场）</td><td>默写 <code class="inl">*args</code> / <code class="inl">**kwargs</code> 各自收到什么；说清 <code class="inl">a = b</code> 和 <code class="inl">a = b.copy()</code> 的差别</td></tr><tr><td>Day 3</td><td>PART 2 的 2.1~2.16（NumPy 全部）</td><td>口算 <code class="inl">(2, 3, 4) + (3, 1)</code> 能否广播、结果形状；用布尔掩码筛出数组里大于 5 的数</td></tr><tr><td>Day 4</td><td>PART 3 的 3.1~3.15（pandas 全部）</td><td>说出 <code class="inl">loc</code> 与 <code class="inl">iloc</code> 的两个差别；手写一行 <code class="inl">groupby + agg</code> 求分组均值</td></tr><tr><td>Day 5</td><td>PART 4 的 4.1~4.8（张量与 autograd）</td><td>写出 <code class="inl">(B, C, H, W)</code> 变 <code class="inl">(B, C, H*W)</code> 的变形；说清 <code class="inl">from_numpy</code> 和 <code class="inl">tensor</code> 谁共享内存</td></tr><tr><td>Day 6</td><td>PART 4 的 4.9~4.16（模型与训练循环）</td><td>默写训练五步；写出验证循环的两步保险（<code class="inl">eval()</code> + <code class="inl">no_grad()</code>）</td></tr><tr><td>Day 7</td><td>PART 5 的 5.1~5.13 + 本篇 6.1~6.4</td><td>不查资料画出「训练/验证 loss 双曲线 + 图例」；遮住 6.1 表的 PyTorch 列，只看「想干什么」列默写</td></tr></table>
-<p>安排逻辑说给你听：前两天 Python 打底（地基），中间两天 NumPy 和 pandas（数据分析主力），第五六天连着啃 PyTorch（本手册的终点站），最后一天 Matplotlib 收尾、再回附录把四库横向串一遍——串完这一遍，语法在你脑子里就从「五条独立的竖线」织成「一张网」，网才兜得住真实代码。PyTorch 独占两天不是偏心：它是四库里唯一带「梯度」和「训练循环」概念的，东西最多、链条最长，一天装不下。任务做不出来别硬扛，直接回对应小节重读，第二遍永远比第一遍快。如果你的时间被压缩到只剩三天，就用极限版：Day 1 读 1.1~1.14，Day 2 读 2.1~2.16 加 3.1~3.15，Day 3 读 4.1~4.16 加本篇 6.1，Matplotlib（5.1~5.13）改成用时再查——核心语法优先，画图永远可以现查。通关标准也给你定死：七天后，遮住代码只看小节标题，能把八成语法默出来；随便翻一段 GitHub 上的训练代码，四问能不打磕巴地问下来——满足这两条，这份手册的使命就完成了，接下来该去真实代码里泡着。</p>
-<div class="box tip"><span class="t">背诵方法：遮代码，看标题，默写</span><p>默写比「看熟了」有效十倍——看的时候你的大脑在认路，默写的时候它在修路。具体做法：</p><p>- 拿一张纸盖住代码块，只露出小节标题</p><p>- 在白纸上把语法默写出来，写完揭开对照</p><p>- 写错或写不出的小节，用铅笔在标题上画个圈，第二天和第七天只重点看画圈的</p><p>- 连续两轮全对的小节直接划掉，把时间省给还画着圈的</p><p>- 每天最后 5 分钟：把当天画圈的小节再默一遍才收工</p></div>
-<div class="box ok"><span class="t">第二到第四周：用「查表」替代「背诵」</span><p>七天后别再反复刷手册，去找 2~3 个真实项目读（推荐 PyTorch 官方 tutorials、Kaggle 的 EDA notebook），遇到看不懂的写法再回来翻对应的表。</p><p>每遇到一个看不懂的写法，先猜它的 shape，再运行验证——这是把语法变成本能的唯一方法。</p></div>
-<div class="box warn"><span class="t">背诵计划的三大坑</span><p>坑一：只看不动手——眼睛会说谎，手不会，默写才是检验。</p><p>坑二：从头到尾连续精读——三天后必然弃疗，背诵手册要「过几遍」而不是「啃一遍」。</p><p>坑三：任务做不出来就直接看答案——先回对应小节重读一遍再试，直接看答案的记忆留存率约等于零。</p></div>
+<h3 id="p7-1" data-nav="7.1 七天动手学习计划">七天动手学习计划</h3>
+<p>把这份计划当作一条可调整的练习路径，而不是七天必须完成的进度表。每天可安排 30~45 分钟：先读目标小节，运行示例，再完成一项可检查的小任务；某天内容太多时拆成两天。</p>
+<table><tr><th>天</th><th>学习重点</th><th>当天交付</th></tr><tr><td>Day 1</td><td>Python 序列、推导式、函数</td><td>写一个小脚本：读取两列列表、配对、过滤并打印汇总</td></tr><tr><td>Day 2</td><td>NumPy shape、索引、axis、广播</td><td>生成一个二维数组，按列标准化；打印每一步的 shape 并验证均值</td></tr><tr><td>Day 3</td><td>pandas 读取、检查、筛选、缺失值</td><td>建立一张小表，检查 dtype 和缺失值，筛出符合条件的记录</td></tr><tr><td>Day 4</td><td>pandas groupby、merge、时间与类别</td><td>生成分组汇总表，合并一张维表，并检查合并前后的行数</td></tr><tr><td>Day 5</td><td>Tensor、shape、autograd、Dataset</td><td>把特征与标签组成 Dataset/DataLoader，取一批并核对 shape、dtype、device</td></tr><tr><td>Day 6</td><td>模型、损失、优化器、训练与验证</td><td>训练一个小型分类器，分别记录训练损失和验证指标</td></tr><tr><td>Day 7</td><td>Matplotlib 与跨库复习</td><td>绘制训练/验证曲线并保存；用 6.1~6.4 查找等价 API，不要求背表</td></tr></table>
+<div class="box ok"><span class="t">贯穿练习：小型表格分类</span><p>用 pandas 创建或读取一张包含数值特征和类别标签的小表；检查缺失值与 dtype，划分训练集和验证集；将数值列转换为 float32、标签转换为 long，再用 Dataset、DataLoader 和一个小型 nn.Module 完成训练。记录每轮 loss 与验证准确率，最后用 Matplotlib 绘图。</p><p><b>完成标准：</b>能解释数据的行数与 shape 如何变化；验证阶段不计算梯度；训练图上有明确图例和轴标签；不会把验证数据用于参数更新。</p></div>
+<p>七天结束后，回到做错或解释不清的练习，隔几天再独立完成一次。随后阅读一个真实项目，把本手册当查阅资料：先预测 shape 和结果，再运行验证。能解释自己的判断，比默写固定代码更可靠。</p>
+<div class="box tip"><span class="t">复习方法</span><p>把代码遮住，先根据标题说出用途和关键规则；再自己写一个最小例子运行。遇到错误，记录原因和修正方式，下次复做同类任务时先独立排查。</p></div>
+<div class="box ok"><span class="t">继续练习</span><p>七天后可以阅读一个真实项目或官方教程。遇到看不懂的写法，先判断输入输出 shape、dtype 和行为，再回到对应章节查阅。</p></div>
 <h3 id="p7-2" data-nav="7.2 读代码四问检查清单">读代码四问检查清单</h3>
-<p>背完语法只是第一步。真实代码变量名又短又丑、一行套三件事，你还是可能当场懵住——因为背语法是「认识每个字」，读代码要的是「知道每行在干嘛」。这节给你四个问题，任何一行看不懂的代码，挨个问一遍，九成都能自己拆明白：</p>
+<p>语法熟悉后，还需要练习从上下文推断代码意图。读一段陌生的数值或训练代码时，可以依次检查这四项：</p>
 <ul><li>一问<b>形状</b>：这个变量现在是什么形状？先在心里猜，再 <code class="inl">print(x.shape)</code> 验证——猜错的地方就是你没吃透的地方</li><li>二问<b>类型与设备</b>：<code class="inl">x.dtype</code> 是 float32 吗？<code class="inl">x.device</code> 在 CPU 还是 GPU？九成运行时报错都是这俩对不上</li><li>三问<b>哪一维</b>：这一步在哪一维上操作？去找 <code class="inl">axis=</code> / <code class="inl">dim=</code>，或者切片里冒号的位置</li><li>四问<b>梯度</b>：<code class="inl">x.requires_grad</code> 是 True 吗？<code class="inl">x.grad_fn</code> 有没有值？——答案决定这行代码活在训练里还是推理里</li></ul>
 <p>前三问甚至不用背，一行 print 全带走：</p>
 <div class="cell"><div class="bar"><span>four_q.py</span><span class="cp">复制</span></div><pre><code>print(x.shape)                      # ①
@@ -3756,7 +3783,7 @@ for x, y in train_loader:                                  # ③
     optimizer.step()                                       # ⑩</code></pre></div>
 <div class="xp"><div class="xi"><span class="xn">①</span><p>选设备。三元表达式：有可用显卡就 <code class="inl">'cuda'</code>，没有就 <code class="inl">'cpu'</code>——<code class="inl">cuda.is_available()</code> 返回一个 bool，这台机器有没有 GPU 它说了算。四问从这行就开始了：后面所有 <code class="inl">.to(device)</code> 的「设备」答案都在这一行定死。</p></div><div class="xi"><span class="xn">②</span><p>把模型搬到 device。注意这里写了 <code class="inl">model = </code> 接住——其实 <code class="inl">nn.Module</code> 的 <code class="inl">.to()</code> 是原地生效的，不接也行；但下一行 Tensor 的 <code class="inl">.to()</code> 必须接住。两种 <code class="inl">.to()</code> 脾气不同（Module 原地、Tensor 返回新张量），统一养成接住的习惯最稳，这是互操作里最阴的一对。</p></div><div class="xi"><span class="xn">③</span><p>DataLoader 每次吐出一个批次：特征 x 和标签 y。四问之一立刻问出来：x 的形状是什么？图片任务通常是 <code class="inl">(B, C, H, W)</code>，表格任务通常是 <code class="inl">(B, features)</code>，B 是批大小，由建 DataLoader 时的 <code class="inl">batch_size</code> 决定。</p></div><div class="xi"><span class="xn">④</span><p>把这批数据也搬上同一台设备。为什么必须 <code class="inl">x = </code> 接住：Tensor 的 <code class="inl">.to()</code> 返回新张量、原来的 x 原地不动（对照 ②）。设备不一致——模型在 GPU、数据在 CPU——会在 ⑦ 那里直接报错，而不是这里。</p></div><div class="xi"><span class="xn">⑤</span><p>搬设备之外顺手转了 int64。四问之二：<code class="inl">CrossEntropyLoss</code> 只收 long 类型的标签，喂 float32 直接报错。训练代码里看到 <code class="inl">.long()</code>，十有八九就是给损失函数递投名状。</p></div><div class="xi"><span class="xn">⑥</span><p>清空上一批残留的梯度。为什么必须有这行：PyTorch 的 <code class="inl">.grad</code> 是累加设计（本意是方便梯度累积），不清零的话这一批的梯度会叠在上一批上面，模型越训越歪——它是训练循环里删掉不报错、但毁掉训练的隐形保命行。</p></div><div class="xi"><span class="xn">⑦</span><p>前向传播。四问之一：out 的形状是 <code class="inl">(B, num_classes)</code>，每行是这个样本对每一类的得分。四问之四在这里悄悄生效：从这行开始，计算图在背后搭建，out 的 <code class="inl">grad_fn</code> 已经有值了。</p></div><div class="xi"><span class="xn">⑧</span><p>算损失。机制要点：<code class="inl">CrossEntropyLoss</code> 内部自带 softmax，所以模型最后一层是裸的 <code class="inl">Linear</code>——如果你看到模型里自己又接了个 softmax，那多半是双重 softmax 的 bug，结果会明显变差但不报错。</p></div><div class="xi"><span class="xn">⑨</span><p>反向传播：从 loss 出发，沿 ⑦⑧ 搭好的计算图逆向回溯，把每个参数的 <code class="inl">.grad</code> 填上。四问之四在这一行前后发生质变：参数的 <code class="inl">.grad</code> 之前是 None，之后全有值。</p></div><div class="xi"><span class="xn">⑩</span><p>优化器按刚填好的 <code class="inl">.grad</code> 更新参数。为什么 ⑨ 和 ⑩ 要拆成两行：backward 只算梯度不动参数，step 只动参数不算梯度，各干一件事，中间才能插梯度裁剪、日志这些活——合并成一步你就没地方插了。</p></div></div>
 <p>最后送你一张「报错现场 ↔ 该问哪一问」的对照，读代码卡住时直接对号入座：</p>
-<ul><li>报错带 "mat1 and mat2 shapes cannot be multiplied"——线性层输入对不上，回去问第一问：上一行输出的形状到底是什么</li><li>报错带 "Expected all tensors to be on the same device"——模型和数据不同设备，第二问的射程</li><li>报错带 "expected scalar type"——dtype 不匹配（多半是标签没转 long），也是第二问</li><li>pandas 冒出 SettingWithCopyWarning——你在改临时副本（见 6.3 的 warn 盒子），算第一问和索引机制的合谋</li><li>loss 曲线一开始正常、后面越来越歪——检查第六行 <code class="inl">zero_grad()</code> 是不是被你删了，这属于第四问管训练机制的延伸</li></ul>
+<ul><li>报错带 "mat1 and mat2 shapes cannot be multiplied"：检查线性层输入维度和上一层输出 shape。</li><li>报错带 "Expected all tensors to be on the same device"：检查模型与数据的 device。</li><li>报错带 "expected scalar type"：检查 dtype，例如类别索引 target 是否为 long。</li><li>链式赋值未修改原表：检查是否通过一次 <code class="inl">.loc</code> 明确指定赋值目标；不同 pandas 版本的警告表现可能不同。</li><li>训练指标异常：检查梯度清零、训练/评估模式，以及数据和标签是否正确对齐。</li></ul>
 <div class="box ok"><span class="t">四问口诀</span><p>「形状、设备、哪一维、有没有梯度」——拿到任何一段看不懂的深度学习代码，先别慌，把这四个问题挨个砸上去。</p><p>四问答完，九成代码都能读懂；剩下的一成，回前面五个 PART 翻。</p></div>
 
 <p style="text-align:center;color:var(--fg-faint);margin-top:50px;font-size:13px">
