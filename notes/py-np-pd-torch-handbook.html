@@ -121,6 +121,23 @@ td code,th code{font-family:var(--mono);font-size:12.5px;background:none;border:
 .mem .card .ttl{font-weight:700;font-size:13.5px;margin-bottom:5px;color:var(--accent)}
 .mem .card .bd{font-size:13.5px;color:var(--fg-mid)}
 .mem .card code{font-family:var(--mono);font-size:12.5px;color:#c7254e}
+/* ---------- 图解 ---------- */
+.fig{margin:16px 0;border:1px solid var(--bd);border-radius:10px;background:#fff;overflow:hidden}
+.fig .cap{
+  display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-soft);
+  border-bottom:1px solid var(--bd-soft);font-size:13px;color:var(--fg);font-weight:700;
+}
+.fig .cap .no{
+  flex:0 0 auto;font-family:var(--mono);font-size:11px;color:#fff;background:var(--accent);
+  border-radius:4px;padding:1px 7px;font-weight:600;letter-spacing:.5px;
+}
+.fig .pic{padding:14px 12px;overflow-x:auto;background:#fff}
+.fig svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.fig .note{
+  padding:8px 13px;border-top:1px dashed var(--bd);font-size:12.5px;
+  color:var(--fg-soft);background:#fcfcfd;line-height:1.65;
+}
+.fig .note b{color:var(--fg-mid)}
 /* ---------- 搜索命中 ---------- */
 .hit{background:#fde68a;border-radius:2px}
 .dim{opacity:.18}
@@ -276,6 +293,7 @@ hr.soft{border:none;border-top:1px dashed var(--bd);margin:26px 0}
 <span class="t">阅读约定</span>
 <p>· <code class="inl"># =&gt;</code> 表示这行代码的输出结果</p>
 <p>· <span class="badge hot">重点</span> = 高频 + 易错，必须掌握 · <span class="badge">易混</span> = 长得像但含义不同 · <span class="badge new">原理</span> = 解释为什么</p>
+<p>· 全书共 <b>16 张图解</b>（切片、axis、广播、视图/副本、loc/iloc、groupby、autograd、训练循环、Figure/Axes……），都放在对应章节里，翻到那一节就能看到</p>
 <p>· 所有代码默认已执行 <code class="inl">import numpy as np</code>、<code class="inl">import pandas as pd</code>、<code class="inl">import torch</code></p>
 </div>
 
@@ -392,6 +410,93 @@ a[blk]             <span class="c"># =&gt; [2, 4, 6]</span></code></pre></div>
 <span class="t">记忆点</span>
 <p><b>左闭右开</b>：<code class="inl">a[2:5]</code> 取 3 个元素（5-2=3）。这个「长度 = stop - start」的直觉要形成条件反射。</p>
 <p><b>为什么这样设计</b>：<code class="inl">a[:i]</code> 和 <code class="inl">a[i:]</code> 拼起来正好是 <code class="inl">a</code>，不重不漏，切分点 i 天然无歧义。</p>
+</div>
+
+<div class="fig" id="fig-slice">
+  <div class="cap"><span class="no">图 1</span>切片左闭右开：数「缝」不数「格子」</div>
+  <div class="pic">
+<svg viewBox="0 0 720 290" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</text>
+
+  <!-- 格子 -->
+  <g font-size="12" font-family="monospace">
+    <rect x="24" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="47" y="62" text-anchor="middle" fill="#4b5563">0</text>
+    <rect x="70" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="93" y="62" text-anchor="middle" fill="#4b5563">1</text>
+    <rect x="116" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="139" y="62" text-anchor="middle" fill="#4b5563">2</text>
+    <rect x="162" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="185" y="62" text-anchor="middle" fill="#4b5563">3</text>
+    <rect x="208" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="231" y="62" text-anchor="middle" fill="#4b5563">4</text>
+    <rect x="254" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="277" y="62" text-anchor="middle" fill="#4b5563">5</text>
+    <rect x="300" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="323" y="62" text-anchor="middle" fill="#4b5563">6</text>
+    <rect x="346" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="369" y="62" text-anchor="middle" fill="#4b5563">7</text>
+    <rect x="392" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="415" y="62" text-anchor="middle" fill="#4b5563">8</text>
+    <rect x="438" y="40" width="46" height="34" fill="#f3f4f6" stroke="#9ca3af"/><text x="461" y="62" text-anchor="middle" fill="#4b5563">9</text>
+  </g>
+
+  <!-- 正向索引 -->
+  <g font-size="10" fill="#6b7280">
+    <text x="47" y="86" text-anchor="middle">0</text><text x="93" y="86" text-anchor="middle">1</text>
+    <text x="139" y="86" text-anchor="middle">2</text><text x="185" y="86" text-anchor="middle">3</text>
+    <text x="231" y="86" text-anchor="middle">4</text><text x="277" y="86" text-anchor="middle">5</text>
+    <text x="323" y="86" text-anchor="middle">6</text><text x="369" y="86" text-anchor="middle">7</text>
+    <text x="415" y="86" text-anchor="middle">8</text><text x="461" y="86" text-anchor="middle">9</text>
+  </g>
+  <!-- 负索引 -->
+  <g font-size="10" fill="#b45309">
+    <text x="47" y="100" text-anchor="middle">-10</text><text x="93" y="100" text-anchor="middle">-9</text>
+    <text x="139" y="100" text-anchor="middle">-8</text><text x="185" y="100" text-anchor="middle">-7</text>
+    <text x="231" y="100" text-anchor="middle">-6</text><text x="277" y="100" text-anchor="middle">-5</text>
+    <text x="323" y="100" text-anchor="middle">-4</text><text x="369" y="100" text-anchor="middle">-3</text>
+    <text x="415" y="100" text-anchor="middle">-2</text><text x="461" y="100" text-anchor="middle">-1</text>
+  </g>
+
+  <!-- 缝位置 -->
+  <g font-size="9" fill="#9ca3af">
+    <text x="24" y="118">0</text><text x="70" y="118">1</text><text x="116" y="118">2</text>
+    <text x="162" y="118">3</text><text x="208" y="118">4</text><text x="254" y="118">5</text>
+    <text x="300" y="118">6</text><text x="346" y="118">7</text><text x="392" y="118">8</text>
+    <text x="438" y="118">9</text><text x="484" y="118">10</text>
+  </g>
+  <line x1="24" y1="122" x2="484" y2="122" stroke="#d1d5db" stroke-width="1"/>
+
+  <!-- a[2:5] 高亮 -->
+  <rect x="116" y="40" width="138" height="34" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="139" y="62" font-size="12" text-anchor="middle" fill="#1e3a8a" font-family="monospace" font-weight="700">2</text>
+  <text x="185" y="62" font-size="12" text-anchor="middle" fill="#1e3a8a" font-family="monospace" font-weight="700">3</text>
+  <text x="231" y="62" font-size="12" text-anchor="middle" fill="#1e3a8a" font-family="monospace" font-weight="700">4</text>
+  <text x="185" y="140" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">a[2:5] → [2, 3, 4]</text>
+  <text x="185" y="156" font-size="10" text-anchor="middle" fill="#1e40af">从缝 2 切到缝 5，共 5-2 = 3 个</text>
+
+  <!-- a[-3:] -->
+  <rect x="346" y="178" width="138" height="34" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="369" y="200" font-size="12" text-anchor="middle" fill="#92400e" font-family="monospace" font-weight="700">7</text>
+  <text x="415" y="200" font-size="12" text-anchor="middle" fill="#92400e" font-family="monospace" font-weight="700">8</text>
+  <text x="461" y="200" font-size="12" text-anchor="middle" fill="#92400e" font-family="monospace" font-weight="700">9</text>
+  <text x="415" y="230" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b45309">a[-3:] → [7, 8, 9]</text>
+
+  <!-- a[::2] -->
+  <rect x="24" y="244" width="46" height="30" fill="#dcfce7" stroke="#16a34a"/>
+  <rect x="116" y="244" width="46" height="30" fill="#dcfce7" stroke="#16a34a"/>
+  <rect x="208" y="244" width="46" height="30" fill="#dcfce7" stroke="#16a34a"/>
+  <rect x="300" y="244" width="46" height="30" fill="#dcfce7" stroke="#16a34a"/>
+  <rect x="392" y="244" width="46" height="30" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="47" y="264" font-size="11" text-anchor="middle" fill="#15803d">0</text>
+  <text x="139" y="264" font-size="11" text-anchor="middle" fill="#15803d">2</text>
+  <text x="231" y="264" font-size="11" text-anchor="middle" fill="#15803d">4</text>
+  <text x="323" y="264" font-size="11" text-anchor="middle" fill="#15803d">6</text>
+  <text x="415" y="264" font-size="11" text-anchor="middle" fill="#15803d">8</text>
+  <text x="500" y="264" font-size="11.5" fill="#15803d" font-weight="700">a[::2] 每隔 2 个取一个</text>
+
+  <!-- 右侧要点 -->
+  <rect x="500" y="40" width="200" height="120" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="516" y="62" font-size="11.5" font-weight="700" fill="#b45309">三条铁律</text>
+  <text x="516" y="82" font-size="10.5" fill="#78350f">① 含 start，不含 stop</text>
+  <text x="516" y="100" font-size="10.5" fill="#78350f">② 长度 = stop - start</text>
+  <text x="516" y="118" font-size="10.5" fill="#78350f">③ -1 是最后一个，不是倒数第二个</text>
+  <text x="516" y="140" font-size="10.5" font-weight="700" fill="#b45309">a[::-1] 就是反转</text>
+  <text x="516" y="155" font-size="10.5" fill="#78350f">step 为负：start 要 &gt; stop</text>
+</svg>
+  </div>
+  <div class="note"><b>为什么 stop 不包含：</b>这样 <code>a[:i]</code> + <code>a[i:]</code> 刚好拼回 <code>a</code>，切分点 i 没有歧义，循环里切分数据时不会漏元素或重复。<b>NumPy / pandas / PyTorch 的切片全部沿用这套规则</b>，只有 <code>df.loc['a':'c']</code>（按标签切片）是<b>闭区间</b>，这是唯一例外。</div>
 </div>
 
 <h3 id="py-comp">1.2 推导式（Comprehension）<span class="badge hot">重点</span></h3>
@@ -973,6 +1078,59 @@ a[np.ix_([<span class="n">0</span>,<span class="n">2</span>], [<span class="n">1
 idx = a.argmax(axis=<span class="n">1</span>)                  <span class="c"># 每行最大值的列号</span>
 np.take_along_axis(a, idx[:, <span class="b">None</span>], axis=<span class="n">1</span>)  <span class="c"># 取出每行最大值</span></code></pre></div>
 
+<div class="fig" id="fig-view">
+  <div class="cap"><span class="no">图 2</span>视图 vs 副本：改一个，另一个会不会跟着变</div>
+  <div class="pic">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="vw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <text x="20" y="24" font-size="13" font-weight="700" fill="#24292f">同一块内存 vs 两块内存</text>
+
+  <!-- 内存块 -->
+  <text x="24" y="54" font-size="11" fill="#6b7280">内存</text>
+  <rect x="24" y="62" width="330" height="46" rx="4" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="42" y="82" font-size="11" font-family="monospace" fill="#4b5563">0  1  2  3</text>
+  <text x="42" y="99" font-size="11" font-family="monospace" fill="#4b5563">4  5  6  7</text>
+  <text x="200" y="82" font-size="10.5" fill="#6b7280">← 真实数据只有这一份</text>
+
+  <!-- a -->
+  <rect x="24" y="128" width="150" height="30" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="99" y="148" font-size="12" text-anchor="middle" font-weight="700" fill="#1e40af">a  (原始数组)</text>
+  <line x1="99" y1="128" x2="99" y2="112" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- b 视图 -->
+  <rect x="196" y="128" width="170" height="30" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="281" y="148" font-size="12" text-anchor="middle" font-weight="700" fill="#b91c1c">b = a[0:2, 1:3]  视图</text>
+  <path d="M281,128 C281,112 130,112 130,112" stroke="#dc2626" stroke-width="1.8" fill="none" marker-end="url(#vw)"/>
+  <text x="200" y="176" font-size="11" fill="#b91c1c">只是开了一扇「窗」，指向同一份数据</text>
+  <text x="200" y="192" font-size="11" fill="#b91c1c">b[0,0] = 999  →  a 也变成 999 ⚠️</text>
+
+  <!-- 分隔 -->
+  <line x1="20" y1="212" x2="700" y2="212" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- 副本区 -->
+  <text x="24" y="238" font-size="11" fill="#6b7280">内存（复制后变成两份）</text>
+  <rect x="24" y="246" width="150" height="42" rx="4" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text x="42" y="266" font-size="11" font-family="monospace" fill="#4b5563">0  1  2  3</text>
+  <text x="42" y="283" font-size="11" font-family="monospace" fill="#4b5563">4  5  6  7</text>
+
+  <rect x="230" y="246" width="150" height="42" rx="4" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="248" y="266" font-size="11" font-family="monospace" fill="#15803d">1  2</text>
+  <text x="248" y="283" font-size="11" font-family="monospace" fill="#15803d">5  6</text>
+  <text x="390" y="266" font-size="11" fill="#15803d">← c = a[0:2,1:3].copy()</text>
+  <text x="390" y="283" font-size="11" fill="#15803d">独立一份，改 c 不影响 a ✅</text>
+
+  <!-- 判断方法 -->
+  <rect x="20" y="298" width="680" height="24" rx="6" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="34" y="314" font-size="11.5" fill="#78350f">判断：<tspan font-family="monospace">b.base is a</tspan>（看来源） · <tspan font-family="monospace">np.shares_memory(a, b)</tspan>（最可靠） · 不确定就显式 <tspan font-family="monospace">.copy()</tspan></text>
+</svg>
+  </div>
+  <div class="note"><b>规律：</b>基本切片（<code>a[1:3]</code>、<code>a[:, 0]</code>、<code>a.T</code>、能成功的 <code>reshape</code>）→ <b>视图，共享内存</b>；花式索引（<code>a[[0,2]]</code>）、布尔掩码（<code>a[a&gt;2]</code>）→ <b>副本</b>。<b>PyTorch 同理</b>：<code>t[1:3]</code> 是视图，<code>t[[0,2]]</code> 是副本；但 PyTorch 的 <code>reshape</code> 可能返回视图也可能返回副本（取决于内存是否连续），需要原地修改时先 <code>.clone()</code>。</div>
+</div>
+
 <h3 id="np-mask">2.5 布尔掩码与花式索引</h3>
 <div class="cell"><div class="bar"><span>mask.py</span><span class="cp">复制</span></div><pre><code>a = np.arange(<span class="n">12</span>).reshape(<span class="n">3</span>, <span class="n">4</span>)
 
@@ -1048,6 +1206,94 @@ a.argmax(axis=<span class="n">1</span>)        <span class="c"># =&gt; [2 2]  �
 a.argmax()               <span class="c"># =&gt; 5      展平后的全局索引</span>
 np.unravel_index(a.argmax(), a.shape)  <span class="c"># =&gt; (1, 2)  扁平索引转回多维坐标</span></code></pre></div>
 
+<div class="fig" id="fig-axis">
+  <div class="cap"><span class="no">图 3</span>axis = 沿着哪个方向「走」，走完那一维就消失</div>
+  <div class="pic">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#2563eb"/>
+    </marker>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <!-- 标题：原数组 -->
+  <text x="20" y="26" font-size="13" font-weight="700" fill="#24292f">原数组 a，shape = (2, 3)</text>
+  <text x="20" y="44" font-size="11.5" fill="#6b7280">axis=0 是第 0 维（行，长度 2）；axis=1 是第 1 维（列，长度 3）</text>
+
+  <!-- 网格 -->
+  <g>
+    <rect x="60" y="70" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="90" y="96" font-size="14" text-anchor="middle" fill="#1e40af">1</text>
+    <rect x="124" y="70" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="154" y="96" font-size="14" text-anchor="middle" fill="#1e40af">2</text>
+    <rect x="188" y="70" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="218" y="96" font-size="14" text-anchor="middle" fill="#1e40af">3</text>
+
+    <rect x="60" y="116" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="90" y="142" font-size="14" text-anchor="middle" fill="#1e40af">4</text>
+    <rect x="124" y="116" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="154" y="142" font-size="14" text-anchor="middle" fill="#1e40af">5</text>
+    <rect x="188" y="116" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="218" y="142" font-size="14" text-anchor="middle" fill="#1e40af">6</text>
+  </g>
+  <!-- 维度标签 -->
+  <text x="42" y="96" font-size="11" text-anchor="end" fill="#6b7280">行0</text>
+  <text x="42" y="142" font-size="11" text-anchor="end" fill="#6b7280">行1</text>
+  <text x="90" y="60" font-size="11" text-anchor="middle" fill="#6b7280">列0</text>
+  <text x="154" y="60" font-size="11" text-anchor="middle" fill="#6b7280">列1</text>
+  <text x="218" y="60" font-size="11" text-anchor="middle" fill="#6b7280">列2</text>
+
+  <!-- axis=0 箭头 竖直 -->
+  <line x1="46" y1="76" x2="46" y2="152" stroke="#dc2626" stroke-width="2.5" marker-end="url(#ar2)"/>
+  <text x="36" y="60" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">axis=0</text>
+  <text x="36" y="170" font-size="11" fill="#dc2626" text-anchor="middle">向下</text>
+
+  <!-- axis=1 箭头 水平 -->
+  <line x1="72" y1="180" x2="210" y2="180" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar)"/>
+  <text x="141" y="200" font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">axis=1</text>
+  <text x="141" y="214" font-size="11" fill="#2563eb" text-anchor="middle">向右</text>
+
+  <!-- 箭头：sum(axis=0) -->
+  <line x1="260" y1="100" x2="330" y2="100" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arg)"/>
+  <text x="295" y="88" font-size="11" fill="#6b7280" text-anchor="middle">sum(axis=0)</text>
+
+  <!-- 结果 sum(axis=0) → (3,) -->
+  <text x="345" y="60" font-size="11.5" font-weight="700" fill="#dc2626">结果 shape = (3,)  每列一个值</text>
+  <rect x="345" y="70" width="60" height="42" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="375" y="96" font-size="13" text-anchor="middle" fill="#b91c1c">5</text>
+  <rect x="409" y="70" width="60" height="42" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="439" y="96" font-size="13" text-anchor="middle" fill="#b91c1c">7</text>
+  <rect x="473" y="70" width="60" height="42" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="503" y="96" font-size="13" text-anchor="middle" fill="#b91c1c">9</text>
+  <text x="537" y="96" font-size="11" fill="#6b7280">← 1+4, 2+5, 3+6</text>
+
+  <!-- 箭头：sum(axis=1) -->
+  <line x1="260" y1="240" x2="330" y2="240" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arg)"/>
+  <text x="295" y="228" font-size="11" fill="#6b7280" text-anchor="middle">sum(axis=1)</text>
+
+  <!-- 结果 sum(axis=1) → (2,) -->
+  <text x="345" y="200" font-size="11.5" font-weight="700" fill="#1e40af">结果 shape = (2,)  每行一个值</text>
+  <rect x="345" y="210" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="375" y="236" font-size="13" text-anchor="middle" fill="#1e40af">6</text>
+  <rect x="409" y="210" width="60" height="42" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="439" y="236" font-size="13" text-anchor="middle" fill="#1e40af">15</text>
+  <text x="483" y="236" font-size="11" fill="#6b7280">← 1+2+3, 4+5+6</text>
+
+  <!-- 底部口诀 -->
+  <rect x="20" y="262" width="680" height="52" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="284" font-size="12.5" font-weight="700" fill="#b45309">口诀</text>
+  <text x="36" y="303" font-size="12" fill="#78350f">sum / mean / max / argmax（归约类）：axis=k → 第 k 维被压掉，结果少一位</text>
+  <text x="380" y="303" font-size="12" fill="#78350f">concat / stack（拼接类）：axis=k → 在第 k 维上增长</text>
+</svg>
+  </div>
+  <div class="note"><b>记忆法：</b>把数组想象成 Excel 表。<code>axis=0</code> = 从上往下扫（跨行，得到「每列」的结果）；<code>axis=1</code> = 从左往右扫（跨列，得到「每行」的结果）。三维以上同理：<code>axis=0</code> 跨「页」，<code>axis=1</code> 跨「行」，<code>axis=2</code> 跨「列」。</div>
+</div>
+
 <h3 id="np-broadcast">2.7 广播机制<span class="badge hot">必背</span></h3>
 <div class="box tip">
 <span class="t">三步判断法</span>
@@ -1081,6 +1327,83 @@ dist = ((X[:, <span class="b">None</span>, :] - X[<span class="b">None</span>, :
 <span class="c"># ── np.broadcast_to / np.broadcast_arrays：显式广播 ──</span>
 np.broadcast_to(np.array([<span class="n">1</span>,<span class="n">2</span>,<span class="n">3</span>]), (<span class="n">2</span>,<span class="n">3</span>))   <span class="c"># 视图，不复制内存</span>
 np.broadcast_shapes((<span class="n">2</span>,<span class="n">3</span>), (<span class="n">3</span>,))          <span class="c"># =&gt; (2,3)  只算结果形状</span></code></pre></div>
+
+<div class="fig" id="fig-broadcast">
+  <div class="cap"><span class="no">图 4</span>广播三步判断法：右对齐 → 补 1 → 逐位比较</div>
+  <div class="pic">
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="br" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#15803d"/>
+    </marker>
+    <marker id="bx" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+  <!-- 三步规则条 -->
+  <rect x="20" y="12" width="680" height="34" rx="7" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="34" y="34" font-size="12" fill="#15803d"><tspan font-weight="700">① 右对齐</tspan>  <tspan fill="#4b5563">两个 shape 从最右边一位开始比</tspan>   <tspan font-weight="700" fill="#15803d">② 左边补 1</tspan>  <tspan fill="#4b5563">短的自动补 1</tspan>   <tspan font-weight="700" fill="#15803d">③ 逐位比较</tspan>  <tspan fill="#4b5563">相等或有一个是 1 → 通过</tspan></text>
+
+  <!-- 案例 1 -->
+  <text x="20" y="72" font-size="12.5" font-weight="700" fill="#24292f">✅ 案例 A：(2,3) + (3,)</text>
+  <text x="20" y="88" font-size="11" fill="#6b7280">第 -1 位：3 vs 3 相等 → OK；左边多出的 2 直接保留</text>
+  <text x="60" y="112" font-size="12" font-family="monospace" fill="#1e40af">(2, 3)</text>
+  <text x="60" y="130" font-size="12" font-family="monospace" fill="#6b7280">   (3,)  →  补成 (1,3) → 拉成 (2,3)</text>
+  <rect x="150" y="98" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="167" y="113" font-size="11" text-anchor="middle" fill="#1e40af">2</text>
+  <rect x="188" y="98" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="113" font-size="11" text-anchor="middle" fill="#1e40af">3</text>
+  <text x="232" y="113" font-size="13" fill="#6b7280">+</text>
+  <rect x="250" y="104" width="34" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="267" y="119" font-size="11" text-anchor="middle" fill="#92400e">3</text>
+  <text x="296" y="113" font-size="13" fill="#6b7280">=</text>
+  <rect x="315" y="98" width="34" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="332" y="113" font-size="11" text-anchor="middle" fill="#15803d">2</text>
+  <rect x="353" y="98" width="34" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="370" y="113" font-size="11" text-anchor="middle" fill="#15803d">3</text>
+  <text x="400" y="113" font-size="11" fill="#6b7280">→ (3,) 被「向下复制」成 2 行</text>
+
+  <!-- 案例 2 -->
+  <text x="20" y="150" font-size="12.5" font-weight="700" fill="#24292f">✅ 案例 B：(2,3) + (2,1)</text>
+  <text x="20" y="166" font-size="11" fill="#6b7280">第 -1 位：3 vs 1 → 1 拉成 3；第 -2 位：2 vs 2 相等 → OK</text>
+  <text x="60" y="190" font-size="12" font-family="monospace" fill="#1e40af">   (2,1) → 拉成 (2,3)</text>
+  <rect x="150" y="176" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="167" y="191" font-size="11" text-anchor="middle" fill="#1e40af">2</text>
+  <rect x="188" y="176" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="191" font-size="11" text-anchor="middle" fill="#1e40af">3</text>
+  <text x="232" y="191" font-size="13" fill="#6b7280">+</text>
+  <rect x="250" y="176" width="34" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="267" y="191" font-size="11" text-anchor="middle" fill="#92400e">2</text>
+  <rect x="288" y="176" width="20" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="298" y="191" font-size="10" text-anchor="middle" fill="#92400e">1</text>
+  <text x="320" y="191" font-size="13" fill="#6b7280">=</text>
+  <rect x="339" y="176" width="34" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="356" y="191" font-size="11" text-anchor="middle" fill="#15803d">2</text>
+  <rect x="377" y="176" width="34" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="394" y="191" font-size="11" text-anchor="middle" fill="#15803d">3</text>
+  <text x="424" y="191" font-size="11" fill="#6b7280">→ (2,1) 被「向右复制」成 3 列（按行缩放）</text>
+
+  <!-- 案例 3 -->
+  <text x="20" y="228" font-size="12.5" font-weight="700" fill="#24292f">✅ 案例 C：外积 (3,1) + (1,2) → (3,2)</text>
+  <text x="20" y="244" font-size="11" fill="#6b7280">两个维度都是 1 → 各自拉长，结果取每一位的最大值</text>
+  <rect x="150" y="254" width="20" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="160" y="269" font-size="10" text-anchor="middle" fill="#92400e">3</text>
+  <rect x="174" y="254" width="20" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="184" y="269" font-size="10" text-anchor="middle" fill="#92400e">1</text>
+  <text x="204" y="269" font-size="13" fill="#6b7280">+</text>
+  <rect x="220" y="254" width="20" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="230" y="269" font-size="10" text-anchor="middle" fill="#92400e">1</text>
+  <rect x="244" y="254" width="20" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/><text x="254" y="269" font-size="10" text-anchor="middle" fill="#92400e">2</text>
+  <text x="274" y="269" font-size="13" fill="#6b7280">=</text>
+  <rect x="292" y="254" width="20" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="302" y="269" font-size="10" text-anchor="middle" fill="#15803d">3</text>
+  <rect x="316" y="254" width="20" height="22" rx="3" fill="#dcfce7" stroke="#86efac"/><text x="326" y="269" font-size="10" text-anchor="middle" fill="#15803d">2</text>
+  <text x="346" y="269" font-size="11" fill="#6b7280">x[:, None] + y[None, :] —— 所有两两组合，做距离矩阵必备</text>
+
+  <!-- 失败案例 -->
+  <text x="20" y="306" font-size="12.5" font-weight="700" fill="#b91c1c">❌ 案例 D：(2,3) + (2,) —— 对错了位</text>
+  <text x="20" y="322" font-size="11" fill="#6b7280">右对齐后是「3 vs 2」：既不相等也没有 1 → ValueError</text>
+  <rect x="150" y="332" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="167" y="347" font-size="11" text-anchor="middle" fill="#1e40af">2</text>
+  <rect x="188" y="332" width="34" height="22" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="347" font-size="11" text-anchor="middle" fill="#1e40af">3</text>
+  <text x="232" y="347" font-size="13" fill="#6b7280">+</text>
+  <rect x="264" y="332" width="34" height="22" rx="3" fill="#fee2e2" stroke="#fca5a5"/><text x="281" y="347" font-size="11" text-anchor="middle" fill="#b91c1c">2</text>
+  <path d="M258,332 L316,354" stroke="#b91c1c" stroke-width="2"/>
+  <path d="M316,332 L258,354" stroke="#b91c1c" stroke-width="2"/>
+  <text x="330" y="347" font-size="11.5" fill="#b91c1c" font-weight="700">3 ≠ 2 → 报错</text>
+  <text x="440" y="347" font-size="11" fill="#15803d">修正：v[:, None] → (2,1) 就能对上第 -2 位了</text>
+
+  <!-- 底部 -->
+  <rect x="20" y="368" width="680" height="22" rx="6" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="34" y="383" font-size="11.5" fill="#78350f">想让长度为 N 的向量「按行作用」→ 变形成 (N,1)；「按列作用」→ 保持 (N,) 或 (1,N)。</text>
+</svg>
+  </div>
+  <div class="note"><b>为什么要有广播：</b>它让你不用写 <code>np.tile</code> / 显式复制就能做「每行减自己的均值」「每个样本减全体均值」这类操作——既省内存又快。<b>调试技巧</b>：形状对不上时先打印两个 <code>.shape</code>，从右往左一位位比。PyTorch 的广播规则与 NumPy <b>完全一致</b>，学会一次两处通用。</div>
+</div>
 
 <h3 id="np-shape">2.8 变形 / 转置 / 维度增删</h3>
 <div class="tw"><table>
@@ -1119,6 +1442,90 @@ x = np.zeros((<span class="n">1</span>, <span class="n">3</span>, <span class="n
 x.squeeze()                      <span class="c"># (3,)</span>
 x.squeeze(axis=<span class="n">0</span>)                <span class="c"># (3,1)  只删指定轴（该轴长度必须为 1）</span>
 np.expand_dims(x, axis=<span class="n">1</span>)</code></pre></div>
+
+<div class="fig" id="fig-npshape">
+  <div class="cap"><span class="no">图 5</span>shape 只是「切分方式」，内存永远是摊平的一条</div>
+  <div class="pic">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="sh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="20" y="24" font-size="13" font-weight="700" fill="#24292f">同一条内存，换个 shape 就是不同的「看法」</text>
+
+  <!-- 内存条 -->
+  <text x="24" y="52" font-size="11" fill="#6b7280">实际内存（永远是 1 条，行优先 C order）</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="24" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="41" y="78" text-anchor="middle" fill="#4b5563">0</text>
+    <rect x="58" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="75" y="78" text-anchor="middle" fill="#4b5563">1</text>
+    <rect x="92" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="109" y="78" text-anchor="middle" fill="#4b5563">2</text>
+    <rect x="126" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="143" y="78" text-anchor="middle" fill="#4b5563">3</text>
+    <rect x="160" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="177" y="78" text-anchor="middle" fill="#4b5563">4</text>
+    <rect x="194" y="60" width="34" height="26" fill="#f3f4f6" stroke="#9ca3af"/><text x="211" y="78" text-anchor="middle" fill="#4b5563">5</text>
+  </g>
+  <text x="240" y="78" font-size="11" fill="#6b7280">np.arange(6)</text>
+
+  <!-- 三种看法 -->
+  <line x1="70" y1="94" x2="70" y2="118" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#sh)"/>
+  <text x="24" y="128" font-size="11.5" font-weight="700" fill="#1e40af">shape=(6,)</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="130" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="129" text-anchor="middle" fill="#1e40af">0</text>
+    <rect x="160" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="129" text-anchor="middle" fill="#1e40af">1</text>
+    <rect x="190" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="129" text-anchor="middle" fill="#1e40af">2</text>
+    <rect x="220" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="235" y="129" text-anchor="middle" fill="#1e40af">3</text>
+    <rect x="250" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="265" y="129" text-anchor="middle" fill="#1e40af">4</text>
+    <rect x="280" y="112" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="295" y="129" text-anchor="middle" fill="#1e40af">5</text>
+  </g>
+  <text x="322" y="129" font-size="11" fill="#6b7280">一维：一条</text>
+
+  <line x1="150" y1="94" x2="150" y2="156" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#sh)"/>
+  <text x="24" y="190" font-size="11.5" font-weight="700" fill="#1e40af">reshape(2,3)</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="130" y="164" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="181" text-anchor="middle" fill="#1e40af">0</text>
+    <rect x="160" y="164" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="181" text-anchor="middle" fill="#1e40af">1</text>
+    <rect x="190" y="164" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="181" text-anchor="middle" fill="#1e40af">2</text>
+    <rect x="130" y="190" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="207" text-anchor="middle" fill="#1e40af">3</text>
+    <rect x="160" y="190" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="207" text-anchor="middle" fill="#1e40af">4</text>
+    <rect x="190" y="190" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="205" y="207" text-anchor="middle" fill="#1e40af">5</text>
+  </g>
+  <text x="232" y="190" font-size="11" fill="#6b7280">二维：先填满行</text>
+  <text x="232" y="206" font-size="11" fill="#6b7280">最后一位变化最快</text>
+
+  <line x1="240" y1="94" x2="240" y2="238" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4,3" marker-end="url(#sh)"/>
+  <text x="24" y="272" font-size="11.5" font-weight="700" fill="#1e40af">reshape(3,2)</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="130" y="246" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="263" text-anchor="middle" fill="#1e40af">0</text>
+    <rect x="160" y="246" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="263" text-anchor="middle" fill="#1e40af">1</text>
+    <rect x="130" y="272" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="289" text-anchor="middle" fill="#1e40af">2</text>
+    <rect x="160" y="272" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="289" text-anchor="middle" fill="#1e40af">3</text>
+    <rect x="130" y="298" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="145" y="315" text-anchor="middle" fill="#1e40af">4</text>
+    <rect x="160" y="298" width="30" height="24" fill="#eff6ff" stroke="#93c5fd"/><text x="175" y="315" text-anchor="middle" fill="#1e40af">5</text>
+  </g>
+  <text x="232" y="272" font-size="11" fill="#6b7280">元素顺序不变</text>
+  <text x="232" y="288" font-size="11" fill="#6b7280">只是「每 2 个断一行」</text>
+
+  <!-- 右侧说明 -->
+  <rect x="380" y="60" width="320" height="140" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="396" y="82" font-size="12" font-weight="700" fill="#15803d">reshape 的本质</text>
+  <text x="396" y="104" font-size="11.5" fill="#166534">元素总数必须相等：2×3 = 3×2 = 6 ✓</text>
+  <text x="396" y="122" font-size="11.5" fill="#166534">reshape 不搬运数据，只改「怎么读」→ 通常 O(1)</text>
+  <text x="396" y="140" font-size="11.5" fill="#166534">reshape(-1) 中的 -1 = 「你帮我算这一位」</text>
+  <text x="396" y="158" font-size="11.5" fill="#166534">a.reshape(2,-1) → 2 行，每行自动算 3 个</text>
+  <text x="396" y="182" font-size="11.5" fill="#166534" font-family="monospace">np.ravel(a)    尽量返回视图</text>
+  <text x="396" y="198" font-size="11.5" fill="#166534" font-family="monospace">a.flatten()    一定是副本</text>
+
+  <rect x="380" y="216" width="320" height="130" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="396" y="238" font-size="12" font-weight="700" fill="#b45309">转置 .T 改的是 strides（步长）</text>
+  <text x="396" y="260" font-size="11.5" fill="#78350f">b = [[0,1,2],[3,4,5]]  strides = (24, 8)</text>
+  <text x="396" y="278" font-size="11.5" fill="#78350f">b.T                strides = (8, 24) ← 只换步长</text>
+  <text x="396" y="296" font-size="11.5" fill="#78350f">内存顺序没变 → 变成「非连续」数组</text>
+  <text x="396" y="314" font-size="11.5" fill="#78350f">此时 b.T.reshape(-1) 会先复制一份</text>
+  <text x="396" y="334" font-size="11.5" fill="#78350f">PyTorch 里 .view() 也会因此报错（见图 8）</text>
+</svg>
+  </div>
+  <div class="note"><b>记忆：</b>内存永远是一条直线，<code>shape</code> 只是告诉 NumPy「每几个元素断一次行」。<code>reshape</code> 改断行方式（便宜），<code>.T</code> 改读取步长（也便宜），只有真正需要连续内存时（<code>ascontiguousarray</code>、某些 <code>view</code>）才会真正搬运数据（贵）。</div>
+</div>
 
 <h3 id="np-merge">2.9 拼接 / 切分 / 重复</h3>
 <div class="cell"><div class="bar"><span>merge.py</span><span class="cp">复制</span></div><pre><code>a = np.array([[<span class="n">1</span>, <span class="n">2</span>], [<span class="n">3</span>, <span class="n">4</span>]])
@@ -1478,6 +1885,102 @@ df.loc[df.cls == <span class="s">'x'</span>, <span class="s">'tag'</span>] = <sp
 <p><b>规则：</b>① 筛选后要修改 → 加 <code class="inl">.copy()</code>：<code class="inl">df2 = df[df.score&gt;80].copy()</code>；② 赋值一律走 <code class="inl">.loc</code>；③ 别用 <code class="inl">inplace=True</code>（pandas 3.0 已不推荐）。</p>
 </div>
 
+<div class="fig" id="fig-df">
+  <div class="cap"><span class="no">图 6</span>DataFrame 的两套坐标：标签（loc）与位置（iloc）</div>
+  <div class="pic">
+<svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <text x="20" y="24" font-size="13" font-weight="700" fill="#24292f">一个 DataFrame = 行索引 + 列名 + 值矩阵（每列是一个 Series）</text>
+
+  <!-- 表格 -->
+  <!-- 列头 -->
+  <rect x="150" y="46" width="90" height="28" fill="#e5e7eb" stroke="#9ca3af"/>
+  <text x="195" y="65" font-size="11.5" text-anchor="middle" font-weight="700" fill="#4b5563">name</text>
+  <rect x="240" y="46" width="90" height="28" fill="#e5e7eb" stroke="#9ca3af"/>
+  <text x="285" y="65" font-size="11.5" text-anchor="middle" font-weight="700" fill="#4b5563">score</text>
+  <rect x="330" y="46" width="90" height="28" fill="#e5e7eb" stroke="#9ca3af"/>
+  <text x="375" y="65" font-size="11.5" text-anchor="middle" font-weight="700" fill="#4b5563">cls</text>
+
+  <!-- 行 -->
+  <g font-size="11.5">
+    <!-- index 列 -->
+    <rect x="60" y="46" width="90" height="28" fill="#1e3a8a"/>
+    <text x="105" y="65" font-size="11.5" text-anchor="middle" font-weight="700" fill="#ffffff">index ↓</text>
+    <rect x="60" y="74" width="90" height="30" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="105" y="94" text-anchor="middle" font-weight="700" fill="#1e40af">r1</text>
+    <rect x="60" y="104" width="90" height="30" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="105" y="124" text-anchor="middle" font-weight="700" fill="#1e40af">r2</text>
+    <rect x="60" y="134" width="90" height="30" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="105" y="154" text-anchor="middle" font-weight="700" fill="#1e40af">r3</text>
+    <rect x="60" y="164" width="90" height="30" fill="#dbeafe" stroke="#93c5fd"/>
+    <text x="105" y="184" text-anchor="middle" font-weight="700" fill="#1e40af">r4</text>
+
+    <!-- 数据 -->
+    <rect x="150" y="74" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="195" y="94" text-anchor="middle" fill="#24292f">A</text>
+    <rect x="240" y="74" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="285" y="94" text-anchor="middle" fill="#24292f">85</text>
+    <rect x="330" y="74" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="375" y="94" text-anchor="middle" fill="#24292f">x</text>
+
+    <rect x="150" y="104" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="195" y="124" text-anchor="middle" fill="#24292f">B</text>
+    <rect x="240" y="104" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="285" y="124" text-anchor="middle" fill="#24292f">92</text>
+    <rect x="330" y="104" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="375" y="124" text-anchor="middle" fill="#24292f">y</text>
+
+    <rect x="150" y="134" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="195" y="154" text-anchor="middle" fill="#24292f">C</text>
+    <rect x="240" y="134" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="285" y="154" text-anchor="middle" fill="#24292f">78</text>
+    <rect x="330" y="134" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="375" y="154" text-anchor="middle" fill="#24292f">x</text>
+
+    <rect x="150" y="164" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="195" y="184" text-anchor="middle" fill="#24292f">D</text>
+    <rect x="240" y="164" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="285" y="184" text-anchor="middle" fill="#24292f">90</text>
+    <rect x="330" y="164" width="90" height="30" fill="#fff" stroke="#d1d5db"/><text x="375" y="184" text-anchor="middle" fill="#24292f">y</text>
+  </g>
+
+  <!-- 高亮单元格 loc['r2','score'] -->
+  <rect x="240" y="104" width="90" height="30" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="285" y="124" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">92</text>
+
+  <!-- 位置标注 左侧 -->
+  <text x="44" y="94" font-size="10.5" text-anchor="end" fill="#6b7280">0</text>
+  <text x="44" y="124" font-size="10.5" text-anchor="end" fill="#6b7280">1</text>
+  <text x="44" y="154" font-size="10.5" text-anchor="end" fill="#6b7280">2</text>
+  <text x="44" y="184" font-size="10.5" text-anchor="end" fill="#6b7280">3</text>
+  <text x="30" y="38" font-size="10" fill="#6b7280">位置</text>
+  <text x="30" y="30" font-size="10" fill="#6b7280">（iloc）</text>
+
+  <!-- 位置标注 上方 -->
+  <text x="195" y="38" font-size="10.5" text-anchor="middle" fill="#6b7280">0</text>
+  <text x="285" y="38" font-size="10.5" text-anchor="middle" fill="#6b7280">1</text>
+  <text x="375" y="38" font-size="10.5" text-anchor="middle" fill="#6b7280">2</text>
+
+  <!-- 列 = Series -->
+  <path d="M240,200 L240,216 L330,216 L330,200" stroke="#16a34a" stroke-width="2" fill="none"/>
+  <text x="285" y="232" font-size="11" text-anchor="middle" fill="#15803d" font-weight="700">df['score'] → Series</text>
+
+  <!-- 右侧对照 -->
+  <rect x="450" y="46" width="250" height="120" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+  <text x="466" y="68" font-size="12" font-weight="700" fill="#b91c1c">.loc —— 用「名字」（label）</text>
+  <text x="466" y="90" font-size="11.5" font-family="monospace" fill="#7f1d1d">df.loc['r2', 'score'] → 92</text>
+  <text x="466" y="110" font-size="11.5" font-family="monospace" fill="#7f1d1d">df.loc['r1':'r3'] 含 r3 ！</text>
+  <text x="466" y="130" font-size="11" fill="#991b1b">切片是<b>闭区间</b>（两头都包含）</text>
+  <text x="466" y="150" font-size="11" fill="#991b1b">l = label，名字里的 l</text>
+
+  <rect x="450" y="176" width="250" height="120" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="466" y="198" font-size="12" font-weight="700" fill="#1e40af">.iloc —— 用「第几个」（int）</text>
+  <text x="466" y="220" font-size="11.5" font-family="monospace" fill="#1e3a8a">df.iloc[1, 1] → 92</text>
+  <text x="466" y="240" font-size="11.5" font-family="monospace" fill="#1e3a8a">df.iloc[0:3] 不含 3</text>
+  <text x="466" y="260" font-size="11" fill="#1e40af">切片是<b>左闭右开</b>（和 Python 列表一致）</text>
+  <text x="466" y="280" font-size="11" fill="#1e40af">i = int，整数位置的 i</text>
+
+  <rect x="450" y="306" width="250" height="58" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="466" y="326" font-size="12" font-weight="700" fill="#15803d">df[...] 单括号：列优先</text>
+  <text x="466" y="346" font-size="11" fill="#166534">df['score'] 取列 · df[1:3] 取行（唯一例外）</text>
+
+  <!-- 底部警告 -->
+  <rect x="20" y="322" width="400" height="42" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="34" y="342" font-size="11.5" font-weight="700" fill="#b45309">⚠️ 取值两个都行，但【赋值】只用 .loc / .iloc</text>
+  <text x="34" y="358" font-size="11" fill="#78350f">df[df.score&lt;80]['score'] = 80 ← 链式赋值，无效且报警告</text>
+</svg>
+  </div>
+  <div class="note"><b>为什么两套坐标要分开：</b>pandas 的 index 可以是字符串、日期甚至重复值，它跟「第几行」不是一回事。排序、筛选、<code>drop_duplicates</code> 之后标签会「断号」，但位置永远是 0..n-1。<b>所以：按业务含义取用 <code>loc</code>，按固定顺序取（比如取前 5 行、最后一列）用 <code>iloc</code>。</b></div>
+</div>
+
 <h3 id="pd-mask">3.5 布尔索引 / query</h3>
 <div class="cell"><div class="bar"><span>filter.py</span><span class="cp">复制</span></div><pre><code><span class="c"># ── 布尔掩码 ──</span>
 mask = df[<span class="s">'score'</span>] &gt; <span class="n">80</span>
@@ -1694,6 +2197,105 @@ r.unstack()                                    <span class="c"># 第二级索引
 r.unstack(level=<span class="n">0</span>)
 r.reset_index()                                <span class="c"># 变回普通 DataFrame</span>
 r.sort_values(ascending=<span class="b">False</span>)</code></pre></div>
+
+<div class="fig" id="fig-groupby">
+  <div class="cap"><span class="no">图 7</span>groupby 三步走：Split → Apply → Combine（三种结果长度）</div>
+  <div class="pic">
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ga" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">df.groupby('cls')['score'] —— 4 行数据按 cls 分成 2 组</text>
+
+  <!-- 原始表 -->
+  <text x="24" y="46" font-size="11" fill="#6b7280">原始（4 行）</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="24" y="52" width="52" height="24" fill="#e5e7eb" stroke="#9ca3af"/><text x="50" y="69" text-anchor="middle" fill="#4b5563" font-weight="700">cls</text>
+    <rect x="76" y="52" width="52" height="24" fill="#e5e7eb" stroke="#9ca3af"/><text x="102" y="69" text-anchor="middle" fill="#4b5563" font-weight="700">score</text>
+    <rect x="24" y="76" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="50" y="93" text-anchor="middle" fill="#24292f">x</text>
+    <rect x="76" y="76" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="102" y="93" text-anchor="middle" fill="#24292f">85</text>
+    <rect x="24" y="100" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="50" y="117" text-anchor="middle" fill="#24292f">y</text>
+    <rect x="76" y="100" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="102" y="117" text-anchor="middle" fill="#24292f">92</text>
+    <rect x="24" y="124" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="50" y="141" text-anchor="middle" fill="#24292f">x</text>
+    <rect x="76" y="124" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="102" y="141" text-anchor="middle" fill="#24292f">78</text>
+    <rect x="24" y="148" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="50" y="165" text-anchor="middle" fill="#24292f">y</text>
+    <rect x="76" y="148" width="52" height="24" fill="#fff" stroke="#d1d5db"/><text x="102" y="165" text-anchor="middle" fill="#24292f">90</text>
+  </g>
+
+  <!-- Split 箭头 -->
+  <line x1="140" y1="110" x2="182" y2="110" stroke="#6b7280" stroke-width="1.6" marker-end="url(#ga)"/>
+  <text x="161" y="100" font-size="10.5" fill="#6b7280" text-anchor="middle">Split</text>
+
+  <!-- 分组 -->
+  <rect x="192" y="52" width="120" height="72" rx="6" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="204" y="70" font-size="11.5" font-weight="700" fill="#b91c1c">组 cls='x'</text>
+  <text x="204" y="90" font-size="11" font-family="monospace" fill="#7f1d1d">85, 78</text>
+  <text x="204" y="110" font-size="10.5" fill="#991b1b">2 行</text>
+
+  <rect x="192" y="132" width="120" height="72" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="204" y="150" font-size="11.5" font-weight="700" fill="#1e40af">组 cls='y'</text>
+  <text x="204" y="170" font-size="11" font-family="monospace" fill="#1e3a8a">92, 90</text>
+  <text x="204" y="190" font-size="10.5" fill="#1e40af">2 行</text>
+
+  <!-- Apply 箭头 -->
+  <line x1="322" y1="110" x2="364" y2="110" stroke="#6b7280" stroke-width="1.6" marker-end="url(#ga)"/>
+  <text x="343" y="100" font-size="10.5" fill="#6b7280" text-anchor="middle">Apply</text>
+
+  <!-- 三种 apply -->
+  <rect x="374" y="46" width="96" height="46" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="422" y="64" font-size="11" text-anchor="middle" font-weight="700" fill="#15803d">agg（聚合）</text>
+  <text x="422" y="82" font-size="10" text-anchor="middle" fill="#166534">每组 → 1 个值</text>
+
+  <rect x="374" y="98" width="96" height="46" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="422" y="116" font-size="11" text-anchor="middle" font-weight="700" fill="#15803d">transform</text>
+  <text x="422" y="134" font-size="10" text-anchor="middle" fill="#166534">每组 → 等长广播</text>
+
+  <rect x="374" y="150" width="96" height="46" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="422" y="168" font-size="11" text-anchor="middle" font-weight="700" fill="#15803d">apply</text>
+  <text x="422" y="186" font-size="10" text-anchor="middle" fill="#166534">每组 → 任意结构</text>
+
+  <!-- Combine 箭头 -->
+  <line x1="480" y1="110" x2="516" y2="110" stroke="#6b7280" stroke-width="1.6" marker-end="url(#ga)"/>
+  <text x="498" y="100" font-size="10.5" fill="#6b7280" text-anchor="middle">Combine</text>
+
+  <!-- 结果 1 agg -->
+  <text x="524" y="40" font-size="10.5" fill="#6b7280">.mean() → 2 行（变短）</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="524" y="46" width="40" height="24" fill="#dcfce7" stroke="#86efac"/><text x="544" y="63" text-anchor="middle" fill="#15803d">x</text>
+    <rect x="564" y="46" width="50" height="24" fill="#dcfce7" stroke="#86efac"/><text x="589" y="63" text-anchor="middle" fill="#15803d">81.5</text>
+    <rect x="524" y="70" width="40" height="24" fill="#dcfce7" stroke="#86efac"/><text x="544" y="87" text-anchor="middle" fill="#15803d">y</text>
+    <rect x="564" y="70" width="50" height="24" fill="#dcfce7" stroke="#86efac"/><text x="589" y="87" text-anchor="middle" fill="#15803d">91.0</text>
+  </g>
+  <text x="624" y="70" font-size="10" fill="#6b7280">← 结果比原来短</text>
+
+  <!-- 结果 2 transform -->
+  <text x="524" y="120" font-size="10.5" fill="#6b7280">.transform(mean) → 4 行（等长）</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="524" y="126" width="70" height="22" fill="#dcfce7" stroke="#86efac"/><text x="559" y="142" text-anchor="middle" fill="#15803d">81.5</text>
+    <rect x="594" y="126" width="70" height="22" fill="#dcfce7" stroke="#86efac"/><text x="629" y="142" text-anchor="middle" fill="#15803d">91.0</text>
+    <rect x="524" y="148" width="70" height="22" fill="#dcfce7" stroke="#86efac"/><text x="559" y="164" text-anchor="middle" fill="#15803d">81.5</text>
+    <rect x="594" y="148" width="70" height="22" fill="#dcfce7" stroke="#86efac"/><text x="629" y="164" text-anchor="middle" fill="#15803d">91.0</text>
+  </g>
+  <text x="524" y="186" font-size="10" fill="#166534">← 可直接赋回原表当新列 ✅</text>
+
+  <!-- 结果 3 apply -->
+  <text x="524" y="220" font-size="10.5" fill="#6b7280">.apply(nlargest(1)) → 每组返回子表</text>
+  <rect x="524" y="226" width="140" height="46" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="594" y="246" font-size="10.5" text-anchor="middle" fill="#15803d">x → 85 的子表</text>
+  <text x="594" y="262" font-size="10.5" text-anchor="middle" fill="#15803d">y → 92 的子表</text>
+
+  <!-- 底部对照 -->
+  <rect x="20" y="300" width="690" height="86" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="322" font-size="12" font-weight="700" fill="#b45309">怎么选：看你想让结果有多长</text>
+  <text x="36" y="344" font-size="11.5" fill="#78350f"><tspan font-family="monospace">.agg()</tspan> 每组压成一个数 → 结果行数 = 组数（做统计报表）</text>
+  <text x="36" y="362" font-size="11.5" fill="#78350f"><tspan font-family="monospace">.transform()</tspan> 算出组级值再广播回每行 → 行数不变（做「组内占比」「减去组均值」）</text>
+  <text x="36" y="380" font-size="11.5" fill="#78350f"><tspan font-family="monospace">.apply()</tspan> 最灵活但最慢，能返回任意形状（取每组 TopN、组内自定义加工）</text>
+</svg>
+  </div>
+  <div class="note"><b>常见困惑：</b><code>groupby</code> 本身不计算，返回的是惰性对象，只有接上 <code>mean()</code>/<code>agg()</code> 等才触发。<code>size()</code> 数行数（含 NaN），<code>count()</code> 数非缺失值，两者结果常常不一样。<code>as_index=False</code> 可以让分组键留在列里，后续 merge 更方便。</div>
+</div>
 
 <h3 id="pd-merge">3.11 merge / join / concat</h3>
 <div class="tw"><table>
@@ -1975,6 +2577,60 @@ loss.item()                      <span class="c"># ⭐ 记录 loss 一定要 .it
 <p><code class="inl">losses.append(loss)</code> 而不是 <code class="inl">losses.append(loss.item())</code> → 每个 loss 都带着整张计算图被存进列表，几个 epoch 后显存爆炸。正确做法是 <code class="inl">.item()</code>。</p>
 </div>
 
+<div class="fig" id="fig-nptensor">
+  <div class="cap"><span class="no">图 8</span>numpy ↔ tensor：哪些共享内存，哪些是拷贝</div>
+  <div class="pic">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="nt" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#dc2626"/>
+    </marker>
+    <marker id="ntg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">红色 = 共享内存（改一个另一个跟着变）　绿色 = 独立拷贝</text>
+
+  <!-- 行 1: from_numpy -->
+  <text x="24" y="52" font-size="11.5" font-weight="700" fill="#b91c1c">① torch.from_numpy(a) —— 共享 ⚠️</text>
+  <rect x="24" y="60" width="120" height="34" rx="5" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="84" y="82" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">numpy a</text>
+  <rect x="180" y="60" width="120" height="34" rx="5" fill="#fef2f2" stroke="#dc2626"/>
+  <text x="240" y="82" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">tensor t</text>
+  <line x1="144" y1="77" x2="176" y2="77" stroke="#dc2626" stroke-width="2.2" marker-end="url(#nt)"/>
+  <line x1="176" y1="77" x2="144" y2="77" stroke="#dc2626" stroke-width="2.2" marker-end="url(#nt)"/>
+  <text x="320" y="72" font-size="11" fill="#991b1b">a[0] = 99 → t[0] 也变 99</text>
+  <text x="320" y="88" font-size="11" fill="#6b7280">快（零拷贝），但会互相污染</text>
+
+  <!-- 行 2: torch.tensor -->
+  <text x="24" y="124" font-size="11.5" font-weight="700" fill="#15803d">② torch.tensor(a) —— 拷贝 ✅ 推荐</text>
+  <rect x="24" y="132" width="120" height="34" rx="5" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="84" y="154" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">numpy a</text>
+  <rect x="180" y="132" width="120" height="34" rx="5" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="240" y="154" font-size="11.5" text-anchor="middle" font-weight="700" fill="#15803d">tensor t（新内存）</text>
+  <line x1="144" y1="149" x2="176" y2="149" stroke="#16a34a" stroke-width="2.2" marker-end="url(#ntg)"/>
+  <text x="320" y="144" font-size="11" fill="#166534">改 a 不影响 t</text>
+  <text x="320" y="160" font-size="11" fill="#6b7280">多花一份内存，但行为可预期</text>
+
+  <!-- 行 3: .numpy -->
+  <text x="24" y="196" font-size="11.5" font-weight="700" fill="#b91c1c">③ t.numpy() —— CPU 上共享；GPU 上自动拷贝</text>
+  <rect x="24" y="204" width="120" height="34" rx="5" fill="#fef2f2" stroke="#dc2626"/>
+  <text x="84" y="226" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">tensor t（CPU）</text>
+  <rect x="180" y="204" width="120" height="34" rx="5" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="240" y="226" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">numpy</text>
+  <line x1="144" y1="221" x2="176" y2="221" stroke="#dc2626" stroke-width="2.2" marker-end="url(#nt)"/>
+  <line x1="176" y1="221" x2="144" y2="221" stroke="#dc2626" stroke-width="2.2" marker-end="url(#nt)"/>
+  <text x="320" y="216" font-size="11" fill="#991b1b">GPU 张量 → 先 .cpu() 再 .numpy()</text>
+  <text x="320" y="232" font-size="11" fill="#991b1b">带梯度的张量 → 先 .detach()</text>
+
+  <!-- 安全写法 -->
+  <rect x="20" y="256" width="690" height="34" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="36" y="278" font-size="12" fill="#166534"><tspan font-weight="700">万能安全写法：</tspan><tspan font-family="monospace">arr = t.detach().cpu().numpy()</tspan> 　　<tspan fill="#4b5563">（断梯度 → 搬 CPU → 转 numpy，画图/保存/打印都用它）</tspan></text>
+</svg>
+  </div>
+  <div class="note"><b>三句话记住：</b>① <code>from_numpy</code> 和 CPU 上的 <code>.numpy()</code> 是<b>零拷贝</b>，快但危险；② <code>torch.tensor(x)</code> 才是真正的拷贝；③ 只要是为了「看数值 / 画图 / 存文件」，一律 <code>.detach().cpu().numpy()</code> 或 <code>.item()</code>。</div>
+</div>
+
 <h3 id="pt-shape">4.4 shape 操作大全<span class="badge hot">重点</span></h3>
 <div class="tw"><table>
 <tr><th style="width:26%">操作</th><th style="width:37%">作用</th><th>示例（输入 <code>(2,3,4)</code>）</th></tr>
@@ -2049,6 +2705,74 @@ torch.roll(x, <span class="n">1</span>, dims=<span class="n">0</span>)          
 <p>典型用途：强化学习的 <code class="inl">q_value.gather(1, action)</code>、分类里取出正确类别的 logit。</p>
 </div>
 
+<div class="fig" id="fig-catstack">
+  <div class="cap"><span class="no">图 9</span>cat / stack / unsqueeze：维度会怎么变</div>
+  <div class="pic">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="cs" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">输入：两个 shape = (2,3) 的张量 A、B</text>
+
+  <!-- 输入 -->
+  <rect x="24" y="38" width="66" height="26" rx="3" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="57" y="56" font-size="11" text-anchor="middle" fill="#1e40af">A (2,3)</text>
+  <rect x="98" y="38" width="66" height="26" rx="3" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="131" y="56" font-size="11" text-anchor="middle" fill="#1e40af">B (2,3)</text>
+
+  <!-- cat dim=0 -->
+  <line x1="176" y1="51" x2="196" y2="51" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cs)"/>
+  <text x="206" y="46" font-size="11" font-family="monospace" fill="#b45309">torch.cat([A,B], dim=0)</text>
+  <rect x="206" y="52" width="150" height="56" rx="4" fill="#fffbeb" stroke="#fcd34d"/>
+  <rect x="212" y="58" width="66" height="20" rx="2" fill="#fef3c7" stroke="#fcd34d"/><text x="245" y="72" font-size="10" text-anchor="middle" fill="#92400e">A</text>
+  <rect x="212" y="80" width="66" height="20" rx="2" fill="#fef3c7" stroke="#fcd34d"/><text x="245" y="94" font-size="10" text-anchor="middle" fill="#92400e">B</text>
+  <text x="286" y="72" font-size="11" font-family="monospace" fill="#78350f">→ (4,3)</text>
+  <text x="286" y="90" font-size="10" fill="#78350f">竖着堆在旧维度里</text>
+  <text x="386" y="80" font-size="10.5" fill="#6b7280">行数 2+2=4，列数不变；其他维必须完全相同</text>
+
+  <!-- cat dim=1 -->
+  <line x1="176" y1="125" x2="196" y2="125" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cs)"/>
+  <text x="206" y="120" font-size="11" font-family="monospace" fill="#b45309">torch.cat([A,B], dim=1)</text>
+  <rect x="206" y="126" width="150" height="34" rx="4" fill="#fffbeb" stroke="#fcd34d"/>
+  <rect x="212" y="132" width="66" height="22" rx="2" fill="#fef3c7" stroke="#fcd34d"/><text x="245" y="147" font-size="10" text-anchor="middle" fill="#92400e">A</text>
+  <rect x="280" y="132" width="66" height="22" rx="2" fill="#fef3c7" stroke="#fcd34d"/><text x="313" y="147" font-size="10" text-anchor="middle" fill="#92400e">B</text>
+  <text x="386" y="140" font-size="11" font-family="monospace" fill="#78350f">→ (2,6)</text>
+  <text x="440" y="140" font-size="10.5" fill="#6b7280">横着拼</text>
+
+  <!-- stack dim=0 -->
+  <line x1="176" y1="190" x2="196" y2="190" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cs)"/>
+  <text x="206" y="185" font-size="11" font-family="monospace" fill="#1e40af">torch.stack([A,B], dim=0)</text>
+  <rect x="206" y="192" width="150" height="62" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="214" y="208" font-size="10" fill="#1e40af">新轴 dim0</text>
+  <rect x="252" y="198" width="46" height="20" rx="2" fill="#dbeafe" stroke="#93c5fd"/><text x="275" y="212" font-size="10" text-anchor="middle" fill="#1e40af">A</text>
+  <rect x="252" y="228" width="46" height="20" rx="2" fill="#dbeafe" stroke="#93c5fd"/><text x="275" y="242" font-size="10" text-anchor="middle" fill="#1e40af">B</text>
+  <text x="320" y="212" font-size="11" font-family="monospace" fill="#1e40af">→ (2,2,3)</text>
+  <text x="320" y="232" font-size="10" fill="#1e40af">新增一维！</text>
+  <text x="420" y="212" font-size="10.5" fill="#6b7280">要求 A、B 形状完全相同</text>
+  <text x="420" y="228" font-size="10.5" fill="#6b7280">「把两张纸叠成一摞」</text>
+
+  <!-- unsqueeze / squeeze -->
+  <line x1="176" y1="272" x2="196" y2="272" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cs)"/>
+  <text x="206" y="267" font-size="11" font-family="monospace" fill="#15803d">A.unsqueeze(0) / A.squeeze()</text>
+  <rect x="206" y="274" width="150" height="34" rx="4" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="281" y="296" font-size="11" text-anchor="middle" font-family="monospace" fill="#15803d">(2,3) → (1,2,3)</text>
+  <text x="386" y="296" font-size="10.5" fill="#166534">只加/删长度 1 的维，元素数不变</text>
+
+  <!-- 对比表 -->
+  <rect x="470" y="180" width="240" height="130" rx="8" fill="#f7f8fa" stroke="#e5e7eb"/>
+  <text x="486" y="200" font-size="11.5" font-weight="700" fill="#24292f">一句话区分</text>
+  <text x="486" y="222" font-size="10.5" fill="#4b5563">cat：在<b>已有</b>维度上变长（不升维）</text>
+  <text x="486" y="242" font-size="10.5" fill="#4b5563">stack：<b>新建</b>一个维度（升维）</text>
+  <text x="486" y="262" font-size="10.5" fill="#4b5563">unsqueeze：插一个长度为 1 的维</text>
+  <text x="486" y="282" font-size="10.5" fill="#4b5563">expand：假装变长（stride=0，不占内存）</text>
+  <text x="486" y="302" font-size="10.5" fill="#4b5563">repeat：真的复制（占内存）</text>
+</svg>
+  </div>
+  <div class="note"><b>判断口诀：</b>想知道结果是几维，看 <code>stack</code> 会让维度数 +1，<code>cat</code> 不变。<b>报错排查</b>：<code>cat</code> 报 "Sizes of tensors must match except in dimension k" → 除第 k 维外还有别的维不一样，先打印两个 <code>.shape</code>。</div>
+</div>
+
 <h3 id="pt-view">4.5 view vs reshape vs contiguous<span class="badge hot">高频报错</span></h3>
 <div class="cell"><div class="bar"><span>contiguous.py</span><span class="cp">复制</span></div><pre><code>x = torch.randn(<span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>)
 y = x.permute(<span class="n">2</span>, <span class="n">0</span>, <span class="n">1</span>)        <span class="c"># 换轴：只是改了 stride，内存没重排 → 非连续</span>
@@ -2068,6 +2792,69 @@ x.stride()                    <span class="c"># 各维步长，理解转置背�
 <span class="c"># reshape  : 智能版，能视图就视图，不行就 copy（更安全，推荐日常用）</span>
 <span class="c"># permute/transpose 之后要 view，必须先 .contiguous()</span>
 <span class="c"># flatten  : 内部就是 reshape，安全</span></code></pre></div>
+
+<div class="fig" id="fig-contig">
+  <div class="cap"><span class="no">图 10</span>为什么 permute 之后 view 会报错：stride 变了</div>
+  <div class="pic">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">x = [[1,2,3],[4,5,6]]  shape (2,3)</text>
+
+  <!-- 连续状态 -->
+  <text x="24" y="48" font-size="11.5" font-weight="700" fill="#15803d">① 原始：内存连续</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="24" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="42" y="74" text-anchor="middle" fill="#15803d">1</text>
+    <rect x="60" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="78" y="74" text-anchor="middle" fill="#15803d">2</text>
+    <rect x="96" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="114" y="74" text-anchor="middle" fill="#15803d">3</text>
+    <rect x="132" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="150" y="74" text-anchor="middle" fill="#15803d">4</text>
+    <rect x="168" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="186" y="74" text-anchor="middle" fill="#15803d">5</text>
+    <rect x="204" y="56" width="36" height="26" fill="#dcfce7" stroke="#86efac"/><text x="222" y="74" text-anchor="middle" fill="#15803d">6</text>
+  </g>
+  <text x="252" y="74" font-size="11" font-family="monospace" fill="#166534">stride = (3, 1)</text>
+  <text x="360" y="74" font-size="10.5" fill="#6b7280">下一行跳 3 格，下一列跳 1 格 → 顺序读就是 1,2,3,4,5,6 ✓</text>
+
+  <!-- 转置后 -->
+  <text x="24" y="112" font-size="11.5" font-weight="700" fill="#b91c1c">② x.T 之后：内存没动，只是换读法 → 非连续</text>
+  <g font-size="11" font-family="monospace">
+    <rect x="24" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="42" y="138" text-anchor="middle" fill="#b91c1c">1</text>
+    <rect x="60" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="78" y="138" text-anchor="middle" fill="#b91c1c">2</text>
+    <rect x="96" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="114" y="138" text-anchor="middle" fill="#b91c1c">3</text>
+    <rect x="132" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="150" y="138" text-anchor="middle" fill="#b91c1c">4</text>
+    <rect x="168" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="186" y="138" text-anchor="middle" fill="#b91c1c">5</text>
+    <rect x="204" y="120" width="36" height="26" fill="#fee2e2" stroke="#fca5a5"/><text x="222" y="138" text-anchor="middle" fill="#b91c1c">6</text>
+  </g>
+  <text x="252" y="138" font-size="11" font-family="monospace" fill="#991b1b">stride = (1, 3)</text>
+  <text x="360" y="130" font-size="10.5" fill="#6b7280">按新 stride 读出的逻辑顺序是 1,4,2,5,3,6</text>
+  <text x="360" y="146" font-size="10.5" fill="#6b7280">但它<b>不是</b>内存里的物理顺序 → 非连续</text>
+
+  <!-- 报错 -->
+  <rect x="24" y="172" width="330" height="52" rx="7" fill="#fef2f2" stroke="#fecaca"/>
+  <text x="38" y="192" font-size="11.5" font-weight="700" fill="#b91c1c">x.T.view(-1)  ❌ RuntimeError</text>
+  <text x="38" y="210" font-size="10.5" fill="#991b1b">view 只肯做「零成本换读法」，可这种读法物理上做不到</text>
+
+  <rect x="366" y="172" width="330" height="52" rx="7" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="380" y="192" font-size="11.5" font-weight="700" fill="#15803d">x.T.reshape(-1)  ✅ 得到 [1,4,2,5,3,6]</text>
+  <text x="380" y="210" font-size="10.5" fill="#166534">reshape 会先悄悄 copy 一份连续的，再展平</text>
+
+  <!-- 修复流程 -->
+  <text x="24" y="252" font-size="11.5" font-weight="700" fill="#24292f">修复流程（背这三步）</text>
+  <rect x="24" y="260" width="150" height="34" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="99" y="282" font-size="11.5" text-anchor="middle" fill="#1e40af">y = x.permute(...)</text>
+  <text x="184" y="282" font-size="14" fill="#6b7280">→</text>
+  <rect x="196" y="260" width="150" height="34" rx="6" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="271" y="282" font-size="11.5" text-anchor="middle" fill="#92400e">y.contiguous()</text>
+  <text x="356" y="282" font-size="14" fill="#6b7280">→</text>
+  <rect x="368" y="260" width="150" height="34" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="443" y="282" font-size="11.5" text-anchor="middle" fill="#15803d">.view(-1)  ✅</text>
+  <text x="530" y="266" font-size="10.5" fill="#6b7280">真正搬运一次数据</text>
+  <text x="530" y="282" font-size="10.5" fill="#6b7280">（这一步才花钱）</text>
+
+  <!-- 底部 -->
+  <rect x="20" y="306" width="690" height="20" rx="5" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="34" y="320" font-size="11" fill="#78350f">日常用 <tspan font-family="monospace">reshape</tspan> 就行（它最聪明）；用 <tspan font-family="monospace">view</tspan> 是想让它「不连续时立刻报错」来提醒自己。</text>
+</svg>
+  </div>
+  <div class="note"><b>哪些操作会破坏连续性：</b><code>transpose</code>、<code>permute</code>、<code>.T</code>、带步长的切片（如 <code>x[:, ::2]</code>）、<code>expand</code>。<b>哪些不会：</b><code>reshape</code>（成功时）、<code>view</code>、<code>squeeze</code>/<code>unsqueeze</code>、连续切片。</div>
+</div>
 
 <h3 id="pt-op">4.6 运算 / 广播 / 归约</h3>
 <div class="cell"><div class="bar"><span>ops.py</span><span class="cp">复制</span></div><pre><code>a = torch.randn(<span class="n">2</span>, <span class="n">3</span>); b = torch.randn(<span class="n">2</span>, <span class="n">3</span>)
@@ -2199,6 +2986,73 @@ optimizer = torch.optim.Adam(<span class="k">filter</span>(<span class="k">lambd
 <p><b>规则：</b>凡是参与梯度计算的张量，<b>尽量别用 in-place 操作</b>（<code class="inl">x += 1</code>、<code class="inl">x[0]=1</code>、<code class="inl">.add_()</code> 都算）。例外：<code class="inl">optimizer.zero_grad()</code>、<code class="inl">p.data</code> 操作、推理阶段都安全。</p>
 </div>
 
+<div class="fig" id="fig-autograd">
+  <div class="cap"><span class="no">图 11</span>autograd：前向建图，反向回传梯度</div>
+  <div class="pic">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="fw" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#2563eb"/>
+    </marker>
+    <marker id="bw" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">例子：y = x + 2 → z = 3·y² → out = mean(z)，x 全为 1</text>
+
+  <!-- 前向节点 -->
+  <rect x="30" y="60" width="90" height="46" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="75" y="80" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">x（叶子）</text>
+  <text x="75" y="97" font-size="10" text-anchor="middle" fill="#1e40af">requires_grad=True</text>
+
+  <rect x="190" y="60" width="90" height="46" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="235" y="80" font-size="11.5" text-anchor="middle" font-weight="700" fill="#475569">y = x + 2</text>
+  <text x="235" y="97" font-size="10" text-anchor="middle" fill="#64748b">AddBackward</text>
+
+  <rect x="350" y="60" width="90" height="46" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="395" y="80" font-size="11.5" text-anchor="middle" font-weight="700" fill="#475569">z = 3·y²</text>
+  <text x="395" y="97" font-size="10" text-anchor="middle" fill="#64748b">MulBackward</text>
+
+  <rect x="510" y="60" width="100" height="46" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="560" y="80" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">out = mean(z)</text>
+  <text x="560" y="97" font-size="10" text-anchor="middle" fill="#b91c1c">标量，图上终点</text>
+
+  <!-- 前向箭头 -->
+  <line x1="120" y1="83" x2="184" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#fw)"/>
+  <line x1="280" y1="83" x2="344" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#fw)"/>
+  <line x1="440" y1="83" x2="504" y2="83" stroke="#2563eb" stroke-width="2" marker-end="url(#fw)"/>
+  <text x="300" y="50" font-size="11.5" font-weight="700" fill="#2563eb" text-anchor="middle">前向：一边算一边把 grad_fn 连成图</text>
+
+  <!-- 反向箭头 -->
+  <line x1="504" y1="128" x2="440" y2="128" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#bw)"/>
+  <line x1="344" y1="128" x2="280" y2="128" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#bw)"/>
+  <line x1="184" y1="128" x2="120" y2="128" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#bw)"/>
+  <text x="300" y="150" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">loss.backward()：沿图反着走链式法则</text>
+
+  <!-- 梯度值 -->
+  <text x="470" y="145" font-size="10.5" fill="#991b1b">∂out/∂z = 1/4</text>
+  <text x="290" y="145" font-size="10.5" fill="#991b1b">∂z/∂y = 6y = 18</text>
+  <text x="120" y="145" font-size="10.5" fill="#991b1b">∂y/∂x = 1</text>
+
+  <rect x="30" y="160" width="120" height="34" rx="6" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="90" y="182" font-size="11" text-anchor="middle" font-family="monospace" fill="#b91c1c">x.grad = 4.5</text>
+  <text x="160" y="182" font-size="10.5" fill="#6b7280">← 梯度存进叶子节点的 .grad</text>
+
+  <!-- 三条要点 -->
+  <rect x="20" y="212" width="690" height="94" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="234" font-size="12" font-weight="700" fill="#b45309">三个必须记住的行为</text>
+  <text x="36" y="256" font-size="11.5" fill="#78350f">① 梯度是<b>累加</b>到 .grad 上的，不是覆盖 → 每个 batch 前必须 <tspan font-family="monospace">optimizer.zero_grad()</tspan></text>
+  <text x="36" y="276" font-size="11.5" fill="#78350f">② 只有<b>叶子节点</b>的 .grad 会保留；中间节点的梯度算完就释放（要留用 <tspan font-family="monospace">y.retain_grad()</tspan>）</text>
+  <text x="36" y="296" font-size="11.5" fill="#78350f">③ backward() 后图默认销毁 → 想再反向一次要 <tspan font-family="monospace">retain_graph=True</tspan>（GAN 常用）</text>
+
+  <!-- 推理 -->
+  <rect x="20" y="318" width="690" height="30" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="36" y="338" font-size="11.5" fill="#166534"><tspan font-weight="700">推理时：</tspan><tspan font-family="monospace">with torch.no_grad():</tspan> 不建图（省显存省时间） ＋ <tspan font-family="monospace">model.eval()</tspan> 关掉 Dropout/BN 随机性 → 两个一起用才是标准评估</text>
+</svg>
+  </div>
+  <div class="note"><b>为什么 loss 必须是标量：</b><code>backward()</code> 默认等价于对 loss 求「关于所有元素之和」的导数。非标量张量要传 <code>gradient=</code> 权重，告诉它每个元素各占多少比重。<b>显存坑</b>：<code>losses.append(loss)</code> 会把整张图都留在内存里，必须 <code>loss.item()</code>。</div>
+</div>
+
 <h3 id="pt-nn">4.8 nn.Module 模型定义</h3>
 <div class="cell"><div class="bar"><span>module.py</span><span class="cp">复制</span></div><pre><code><span class="k">class</span> <span class="f">MLP</span>(nn.Module):
     <span class="k">def</span> <span class="f">__init__</span>(<span class="v">self</span>, in_dim, hidden, out_dim, dropout=<span class="n">0.1</span>):
@@ -2311,6 +3165,89 @@ k = torch.randn(B, H, L, D//H)
 scores = q @ k.transpose(-<span class="n">2</span>, -<span class="n">1</span>) / (D//H) ** <span class="n">0.5</span>   <span class="c"># (32,8,50,50)  ⭐</span>
 attn = scores.softmax(dim=-<span class="n">1</span>)
 o = attn @ torch.randn(B, H, L, D//H)     <span class="c"># (32,8,50,64)</span></code></pre></div>
+
+<div class="fig" id="fig-cnn">
+  <div class="cap"><span class="no">图 12</span>一张图看懂 CNN 的 (N, C, H, W) 怎么一路变小</div>
+  <div class="pic">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="cn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">输入图片批次 → 卷积 → 池化 → 展平 → 全连接 → logits</text>
+
+  <!-- 各阶段方块，高度示意 H/W，宽度示意 C -->
+  <!-- 输入 -->
+  <rect x="24" y="60" width="60" height="90" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="54" y="100" font-size="10.5" text-anchor="middle" fill="#1e40af">3</text>
+  <text x="54" y="170" font-size="10.5" text-anchor="middle" fill="#1e40af">(32,3,224,224)</text>
+  <text x="54" y="44" font-size="10" text-anchor="middle" fill="#6b7280">输入</text>
+
+  <line x1="88" y1="105" x2="108" y2="105" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cn)"/>
+
+  <!-- Conv -->
+  <rect x="112" y="72" width="70" height="66" rx="4" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="147" y="100" font-size="10.5" text-anchor="middle" fill="#92400e">64</text>
+  <text x="147" y="170" font-size="10.5" text-anchor="middle" fill="#92400e">(32,64,112,112)</text>
+  <text x="147" y="44" font-size="10" text-anchor="middle" fill="#6b7280">Conv2d(3→64)</text>
+  <text x="147" y="60" font-size="9.5" text-anchor="middle" fill="#b45309">k7 s2 p3</text>
+
+  <line x1="186" y1="105" x2="206" y2="105" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cn)"/>
+
+  <!-- Pool -->
+  <rect x="210" y="88" width="60" height="34" rx="4" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="240" y="109" font-size="10" text-anchor="middle" fill="#92400e">64</text>
+  <text x="240" y="170" font-size="10.5" text-anchor="middle" fill="#92400e">(32,64,55,55)</text>
+  <text x="240" y="44" font-size="10" text-anchor="middle" fill="#6b7280">MaxPool</text>
+  <text x="240" y="60" font-size="9.5" text-anchor="middle" fill="#b45309">k3 s2</text>
+
+  <line x1="274" y1="105" x2="294" y2="105" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cn)"/>
+
+  <!-- AdaptiveAvgPool -->
+  <rect x="298" y="98" width="46" height="14" rx="2" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="321" y="170" font-size="10.5" text-anchor="middle" fill="#15803d">(32,64,1,1)</text>
+  <text x="321" y="44" font-size="10" text-anchor="middle" fill="#6b7280">AdaptiveAvg</text>
+  <text x="321" y="60" font-size="9.5" text-anchor="middle" fill="#15803d">Pool2d(1)</text>
+
+  <line x1="348" y1="105" x2="368" y2="105" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cn)"/>
+
+  <!-- Flatten -->
+  <rect x="372" y="92" width="76" height="26" rx="4" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="410" y="110" font-size="10" text-anchor="middle" fill="#15803d">flatten(1)</text>
+  <text x="410" y="170" font-size="10.5" text-anchor="middle" fill="#15803d">(32, 64)</text>
+  <text x="410" y="44" font-size="10" text-anchor="middle" fill="#6b7280">展平</text>
+
+  <line x1="452" y1="105" x2="472" y2="105" stroke="#6b7280" stroke-width="1.4" marker-end="url(#cn)"/>
+
+  <!-- Linear -->
+  <rect x="476" y="94" width="60" height="22" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="506" y="110" font-size="10" text-anchor="middle" fill="#b91c1c">Linear</text>
+  <text x="506" y="170" font-size="10.5" text-anchor="middle" fill="#b91c1c">(32, 10)</text>
+  <text x="506" y="44" font-size="10" text-anchor="middle" fill="#6b7280">分类头</text>
+
+  <!-- 维度含义标注 -->
+  <rect x="560" y="60" width="150" height="110" rx="8" fill="#f7f8fa" stroke="#e5e7eb"/>
+  <text x="576" y="80" font-size="11" font-weight="700" fill="#24292f">N C H W 各是什么</text>
+  <text x="576" y="100" font-size="10.5" fill="#4b5563">N = batch（样本数）</text>
+  <text x="576" y="118" font-size="10.5" fill="#4b5563">C = 通道（RGB=3，特征图=64）</text>
+  <text x="576" y="136" font-size="10.5" fill="#4b5563">H = 高，W = 宽（空间尺寸）</text>
+  <text x="576" y="158" font-size="10" fill="#6b7280">PyTorch 用 NCHW，numpy/PIL</text>
+  <text x="576" y="172" font-size="10" fill="#6b7280">读出来是 HWC → 要 permute</text>
+
+  <!-- 公式 -->
+  <rect x="20" y="196" width="690" height="46" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="216" font-size="11.5" font-weight="700" fill="#b45309">卷积输出尺寸公式（必须会算）</text>
+  <text x="36" y="236" font-size="11.5" font-family="monospace" fill="#78350f">out = floor( (in + 2*padding - dilation*(kernel-1) - 1) / stride + 1 )</text>
+
+  <!-- 口诀 -->
+  <rect x="20" y="252" width="690" height="36" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="36" y="270" font-size="11" fill="#1e3a8a"><tspan font-weight="700">口诀：</tspan>卷积/池化改 H、W 和 C；BatchNorm / Dropout / 激活函数<b>不改形状</b>；</text>
+  <text x="36" y="284" font-size="11" fill="#1e3a8a">Flatten 把 C·H·W 拉成一条；Linear 只改最后一维。想知道形状随时 <tspan font-family="monospace">print(x.shape)</tspan>。</text>
+</svg>
+  </div>
+  <div class="note"><b>最容易卡的点：</b>卷积要求输入是 4 维 <code>(N,C,H,W)</code>，单张图片要 <code>img.unsqueeze(0)</code> 补 batch 维。<code>CrossEntropyLoss</code> 的 target 是 <b>类别编号</b> <code>(N,)</code> 且 dtype 为 <code>long</code>，不是 one-hot。</div>
+</div>
 
 <h3 id="pt-loss">4.10 损失函数速查</h3>
 <div class="tw"><table>
@@ -2526,6 +3463,80 @@ model.eval()
 <p>再加两个模式开关：训练 <code class="inl">model.train()</code>、验证 <code class="inl">model.eval() + torch.no_grad()</code>。</p>
 </div>
 
+<div class="fig" id="fig-loop">
+  <div class="cap"><span class="no">图 13</span>训练循环五步：清零 → 前向 → 损失 → 反向 → 更新</div>
+  <div class="pic">
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="lp" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#4b5563"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">每个 batch 都重复这五步；外层再套一层 epoch 循环</text>
+
+  <!-- 外层 epoch 框 -->
+  <rect x="20" y="36" width="690" height="300" rx="10" fill="#fafafa" stroke="#cbd5e1" stroke-dasharray="6,4"/>
+  <text x="36" y="56" font-size="11.5" font-weight="700" fill="#475569">for epoch in range(num_epochs):　← 外层，遍历整个数据集一遍</text>
+
+  <!-- 步骤 1 -->
+  <rect x="46" y="70" width="180" height="52" rx="7" fill="#fee2e2" stroke="#dc2626"/>
+  <text x="136" y="90" font-size="11.5" text-anchor="middle" font-weight="700" fill="#b91c1c">① optimizer.zero_grad()</text>
+  <text x="136" y="110" font-size="10" text-anchor="middle" fill="#991b1b">清空上一步残留的梯度</text>
+  <text x="236" y="102" font-size="10" fill="#6b7280">忘了这步 → 梯度累加，训练发散</text>
+
+  <line x1="136" y1="122" x2="136" y2="140" stroke="#4b5563" stroke-width="1.8" marker-end="url(#lp)"/>
+
+  <!-- 步骤 2 -->
+  <rect x="46" y="144" width="180" height="52" rx="7" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="136" y="164" font-size="11.5" text-anchor="middle" font-weight="700" fill="#1e40af">② pred = model(x)</text>
+  <text x="136" y="184" font-size="10" text-anchor="middle" fill="#1e40af">前向传播，建计算图</text>
+  <text x="236" y="172" font-size="10" fill="#6b7280">model.train() 开着</text>
+  <text x="236" y="186" font-size="10" fill="#6b7280">x、y 都要 .to(device)</text>
+
+  <line x1="136" y1="196" x2="136" y2="214" stroke="#4b5563" stroke-width="1.8" marker-end="url(#lp)"/>
+
+  <!-- 步骤 3 -->
+  <rect x="46" y="218" width="180" height="52" rx="7" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="136" y="238" font-size="11.5" text-anchor="middle" font-weight="700" fill="#92400e">③ loss = criterion(...)</text>
+  <text x="136" y="258" font-size="10" text-anchor="middle" fill="#92400e">算出标量损失</text>
+  <text x="236" y="242" font-size="10" fill="#6b7280">记录用 loss.item()</text>
+  <text x="236" y="256" font-size="10" fill="#6b7280">别把 loss 本身存进列表</text>
+
+  <line x1="136" y1="270" x2="136" y2="288" stroke="#4b5563" stroke-width="1.8" marker-end="url(#lp)"/>
+
+  <!-- 步骤 4 -->
+  <rect x="46" y="292" width="180" height="34" rx="7" fill="#f3e8ff" stroke="#9333ea"/>
+  <text x="136" y="313" font-size="11.5" text-anchor="middle" font-weight="700" fill="#7e22ce">④ loss.backward()</text>
+
+  <rect x="270" y="292" width="180" height="34" rx="7" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="360" y="313" font-size="11.5" text-anchor="middle" font-weight="700" fill="#15803d">⑤ optimizer.step()</text>
+  <text x="460" y="313" font-size="10" fill="#6b7280">用 .grad 更新参数（可选 clip_grad_norm_ 先裁剪）</text>
+
+  <!-- 右侧说明：验证阶段 -->
+  <rect x="470" y="70" width="220" height="256" rx="8" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="486" y="92" font-size="11.5" font-weight="700" fill="#15803d">每个 epoch 结束做一次验证</text>
+  <text x="486" y="114" font-size="10.5" font-family="monospace" fill="#166534">model.eval()</text>
+  <text x="486" y="132" font-size="10" fill="#4b5563">关 Dropout / 冻结 BN 统计量</text>
+  <text x="486" y="152" font-size="10.5" font-family="monospace" fill="#166534">with torch.no_grad():</text>
+  <text x="486" y="170" font-size="10" fill="#4b5563">不建图，省显存省时间</text>
+  <line x1="486" y1="182" x2="674" y2="182" stroke="#bbf7d0"/>
+  <text x="486" y="202" font-size="10.5" fill="#166534">只做前向，不算梯度</text>
+  <text x="486" y="220" font-size="10.5" fill="#166534">不调 backward / step</text>
+  <text x="486" y="238" font-size="10.5" fill="#166534">统计 acc / loss 平均值</text>
+  <line x1="486" y1="252" x2="674" y2="252" stroke="#bbf7d0"/>
+  <text x="486" y="272" font-size="10.5" font-weight="700" fill="#15803d">验证完记得 model.train()</text>
+  <text x="486" y="290" font-size="10" fill="#4b5563">否则下一轮 Dropout 不生效</text>
+  <text x="486" y="312" font-size="10" fill="#4b5563">scheduler.step() 一般在这里调</text>
+
+  <!-- 底部 -->
+  <rect x="20" y="346" width="690" height="44" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="366" font-size="11.5" font-weight="700" fill="#b45309">顺序不能换</text>
+  <text x="36" y="384" font-size="11" fill="#78350f">zero_grad 必须在 backward 之前；step 必须在 backward 之后（先有 .grad 才能更新）；scheduler.step() 放在 epoch 末尾而不是 batch 末尾（除非用 OneCycleLR）。</text>
+</svg>
+  </div>
+  <div class="note"><b>两个开关别搞混：</b><code>model.train()/eval()</code> 只影响 Dropout 和 BatchNorm 的行为；<code>torch.no_grad()</code> 才是不建计算图、省显存的那一个。<b>评估要两个一起用。</b></div>
+</div>
+
 <h3 id="pt-gpu">4.14 GPU 与设备管理</h3>
 <div class="cell"><div class="bar"><span>gpu.py</span><span class="cp">复制</span></div><pre><code><span class="c"># ── 检测 ──</span>
 torch.cuda.is_available()             <span class="c"># 是否有可用 GPU</span>
@@ -2699,6 +3710,101 @@ plt.tight_layout()                          <span class="c"># 自动调整间距
 <span class="c"># Jupyter: %matplotlib inline   （或用 %matplotlib widget 可交互）</span>
 <span class="c"># 无界面服务器: import matplotlib; matplotlib.use('Agg') 然后只 savefig 不 show</span>
 plt.close(<span class="s">'all'</span>)                              <span class="c"># 关掉所有图（循环画图时防止内存增长）</span></code></pre></div>
+
+<div class="fig" id="fig-figaxes">
+  <div class="cap"><span class="no">图 14</span>Figure / Axes / Axis：一张图里谁装谁</div>
+  <div class="pic">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <!-- Figure 外框 -->
+  <rect x="20" y="40" width="440" height="280" rx="6" fill="#ffffff" stroke="#9ca3af" stroke-width="3"/>
+  <text x="34" y="30" font-size="13" font-weight="700" fill="#24292f">Figure（整张画布 / 一张纸）</text>
+  <text x="230" y="30" font-size="10.5" fill="#6b7280">fig, axes = plt.subplots(2, 2)</text>
+
+  <!-- Axes 1 -->
+  <rect x="46" y="70" width="170" height="110" rx="3" fill="#f8fafc" stroke="#3b82f6" stroke-width="2"/>
+  <text x="56" y="88" font-size="10.5" font-weight="700" fill="#1e40af">Axes ①</text>
+  <!-- 坐标轴 -->
+  <line x1="66" y1="170" x2="206" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <line x1="66" y1="100" x2="66" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <text x="200" y="182" font-size="9" text-anchor="middle" fill="#475569">X Axis</text>
+  <text x="52" y="106" font-size="9" fill="#475569">Y</text>
+  <!-- 曲线 -->
+  <path d="M76,160 Q100,110 126,140 T196,104" stroke="#dc2626" stroke-width="2" fill="none"/>
+  <!-- 刻度 -->
+  <line x1="96" y1="170" x2="96" y2="174" stroke="#475569"/>
+  <line x1="126" y1="170" x2="126" y2="174" stroke="#475569"/>
+  <line x1="156" y1="170" x2="156" y2="174" stroke="#475569"/>
+  <text x="96" y="184" font-size="8" text-anchor="middle" fill="#6b7280">0</text>
+  <text x="126" y="184" font-size="8" text-anchor="middle" fill="#6b7280">1</text>
+  <text x="156" y="184" font-size="8" text-anchor="middle" fill="#6b7280">2</text>
+  <text x="131" y="196" font-size="9" text-anchor="middle" fill="#475569">xlabel</text>
+  <!-- title -->
+  <text x="131" y="98" font-size="9.5" text-anchor="middle" font-weight="700" fill="#24292f">title</text>
+  <!-- legend -->
+  <rect x="150" y="106" width="46" height="18" rx="2" fill="#fff" stroke="#cbd5e1"/>
+  <line x1="154" y1="115" x2="164" y2="115" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="168" y="118" font-size="8" fill="#475569">sin</text>
+
+  <!-- Axes 2 -->
+  <rect x="236" y="70" width="170" height="110" rx="3" fill="#f8fafc" stroke="#3b82f6" stroke-width="2"/>
+  <text x="246" y="88" font-size="10.5" font-weight="700" fill="#1e40af">Axes ②</text>
+  <line x1="256" y1="170" x2="396" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <line x1="256" y1="100" x2="256" y2="170" stroke="#475569" stroke-width="1.5"/>
+  <g fill="#2563eb">
+    <circle cx="276" cy="150" r="2.5"/><circle cx="296" cy="140" r="2.5"/><circle cx="316" cy="128" r="2.5"/>
+    <circle cx="336" cy="118" r="2.5"/><circle cx="356" cy="110" r="2.5"/><circle cx="376" cy="106" r="2.5"/>
+  </g>
+  <text x="321" y="98" font-size="9.5" text-anchor="middle" font-weight="700" fill="#24292f">scatter</text>
+
+  <!-- Axes 3 -->
+  <rect x="46" y="206" width="170" height="86" rx="3" fill="#f8fafc" stroke="#3b82f6" stroke-width="2"/>
+  <text x="56" y="222" font-size="10.5" font-weight="700" fill="#1e40af">Axes ③</text>
+  <g>
+    <rect x="76" y="240" width="16" height="42" fill="#93c5fd"/>
+    <rect x="98" y="252" width="16" height="30" fill="#60a5fa"/>
+    <rect x="120" y="230" width="16" height="52" fill="#3b82f6"/>
+    <rect x="142" y="262" width="16" height="20" fill="#93c5fd"/>
+    <rect x="164" y="246" width="16" height="36" fill="#60a5fa"/>
+  </g>
+  <line x1="70" y1="282" x2="196" y2="282" stroke="#475569" stroke-width="1.2"/>
+
+  <!-- Axes 4 -->
+  <rect x="236" y="206" width="170" height="86" rx="3" fill="#f8fafc" stroke="#3b82f6" stroke-width="2"/>
+  <text x="246" y="222" font-size="10.5" font-weight="700" fill="#1e40af">Axes ④</text>
+  <rect x="266" y="238" width="40" height="40" fill="#fbbf24" opacity="0.85"/>
+  <rect x="306" y="248" width="40" height="30" fill="#34d399" opacity="0.85"/>
+  <rect x="346" y="258" width="40" height="20" fill="#f87171" opacity="0.85"/>
+
+  <!-- suptitle -->
+  <text x="231" y="58" font-size="10.5" text-anchor="middle" font-weight="700" fill="#7c3aed">fig.suptitle('总标题') —— 属于 Figure 层</text>
+
+  <!-- 右侧说明 -->
+  <rect x="476" y="40" width="234" height="280" rx="8" fill="#f7f8fa" stroke="#e5e7eb"/>
+  <text x="492" y="62" font-size="12" font-weight="700" fill="#24292f">三层对照</text>
+
+  <text x="492" y="86" font-size="11" font-weight="700" fill="#7c3aed">Figure</text>
+  <text x="492" y="104" font-size="10" fill="#4b5563">整张画布，figsize / dpi</text>
+  <text x="492" y="120" font-size="10" font-family="monospace" fill="#6b7280">fig.suptitle()</text>
+  <text x="492" y="136" font-size="10" font-family="monospace" fill="#6b7280">fig.savefig()</text>
+
+  <line x1="492" y1="148" x2="694" y2="148" stroke="#e5e7eb"/>
+
+  <text x="492" y="170" font-size="11" font-weight="700" fill="#1e40af">Axes（一个子图/坐标系）</text>
+  <text x="492" y="188" font-size="10" fill="#4b5563">真正画图的地方，99% 的调用对象</text>
+  <text x="492" y="204" font-size="10" font-family="monospace" fill="#6b7280">ax.plot / ax.scatter</text>
+  <text x="492" y="220" font-size="10" font-family="monospace" fill="#6b7280">ax.set_title / set_xlabel</text>
+  <text x="492" y="236" font-size="10" font-family="monospace" fill="#6b7280">ax.legend / ax.grid</text>
+
+  <line x1="492" y1="248" x2="694" y2="248" stroke="#e5e7eb"/>
+
+  <text x="492" y="270" font-size="11" font-weight="700" fill="#475569">Axis（单根坐标轴）</text>
+  <text x="492" y="288" font-size="10" fill="#4b5563">管刻度、范围、刻度标签</text>
+  <text x="492" y="304" font-size="10" font-family="monospace" fill="#6b7280">ax.xaxis / ax.yaxis</text>
+  <text x="492" y="318" font-size="10" fill="#b91c1c">⚠️ Axes ≠ Axis，差一个字母</text>
+</svg>
+  </div>
+  <div class="note"><b>命名规律（省一半记忆量）：</b>pyplot 式 → OO 式，<b>画内容的函数名不变</b>（<code>plot</code> → <code>plot</code>），<b>设置类前面加 <code>set_</code></b>（<code>title</code> → <code>set_title</code>、<code>xlabel</code> → <code>set_xlabel</code>、<code>xlim</code> → <code>set_xlim</code>、<code>xticks</code> → <code>set_xticks</code>）。例外：<code>legend()</code> 和 <code>grid()</code> 不加 <code>set_</code>。</div>
+</div>
 
 <h3 id="mp-basic">5.2 第一张图：完整流程</h3>
 <div class="cell"><div class="bar"><span>first_plot.py</span><span class="cp">复制</span></div><pre><code><span class="c"># ── 准备数据 ──</span>
@@ -2944,6 +4050,68 @@ inset = ax.inset_axes([<span class="n">0.6</span>, <span class="n">0.6</span>, <
 inset.plot(x, y); inset.set_xlim(<span class="n">10</span>, <span class="n">20</span>)
 ax.indicate_inset_zoom(inset, edgecolor=<span class="s">'red'</span>)        <span class="c"># 画连接线</span></code></pre></div>
 
+<div class="fig" id="fig-grid">
+  <div class="cap"><span class="no">图 15</span>subplots 网格 vs GridSpec 跨格 vs Mosaic 命名布局</div>
+  <div class="pic">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <!-- 例 1：subplots(2,3) -->
+  <text x="20" y="24" font-size="12" font-weight="700" fill="#24292f">① plt.subplots(2, 3) —— 规则网格，axes[行, 列]</text>
+  <g>
+    <rect x="24" y="34" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="50" y="57" font-size="10" text-anchor="middle" fill="#1e40af">[0,0]</text>
+    <rect x="80" y="34" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="106" y="57" font-size="10" text-anchor="middle" fill="#1e40af">[0,1]</text>
+    <rect x="136" y="34" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="162" y="57" font-size="10" text-anchor="middle" fill="#1e40af">[0,2]</text>
+    <rect x="24" y="76" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="50" y="99" font-size="10" text-anchor="middle" fill="#1e40af">[1,0]</text>
+    <rect x="80" y="76" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="106" y="99" font-size="10" text-anchor="middle" fill="#1e40af">[1,1]</text>
+    <rect x="136" y="76" width="52" height="38" rx="3" fill="#eff6ff" stroke="#93c5fd"/><text x="162" y="99" font-size="10" text-anchor="middle" fill="#1e40af">[1,2]</text>
+  </g>
+  <text x="200" y="60" font-size="10" fill="#6b7280">axes 是 (2,3) 的 numpy 数组</text>
+  <text x="200" y="78" font-size="10" fill="#6b7280"><tspan font-family="monospace">axes[0,0].plot(...)</tspan></text>
+  <text x="200" y="96" font-size="10" fill="#6b7280"><tspan font-family="monospace">for a in axes.flat</tspan> 遍历全部</text>
+  <text x="200" y="112" font-size="10" fill="#b45309">1 个子图时返回 Axes 不是数组！</text>
+
+  <!-- 例 2：GridSpec -->
+  <text x="400" y="24" font-size="12" font-weight="700" fill="#24292f">② GridSpec —— 可以让子图跨行/跨列</text>
+  <g>
+    <rect x="404" y="34" width="66" height="38" rx="3" fill="#fef3c7" stroke="#f59e0b"/><text x="437" y="57" font-size="10" text-anchor="middle" fill="#92400e">gs[0,0]</text>
+    <rect x="474" y="34" width="66" height="38" rx="3" fill="#fef3c7" stroke="#f59e0b"/><text x="507" y="57" font-size="10" text-anchor="middle" fill="#92400e">gs[0,1]</text>
+    <rect x="404" y="76" width="136" height="38" rx="3" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/><text x="472" y="99" font-size="10" text-anchor="middle" font-weight="700" fill="#92400e">gs[1, :]  跨整行</text>
+  </g>
+  <text x="556" y="60" font-size="10" fill="#78350f">width_ratios=[2,1]</text>
+  <text x="556" y="76" font-size="10" fill="#78350f">可设各列宽度比例</text>
+  <text x="556" y="92" font-size="10" fill="#78350f">gs[0:2, 0] 也能跨列</text>
+
+  <!-- 例 3 mosaic -->
+  <text x="20" y="146" font-size="12" font-weight="700" fill="#24292f">③ subplot_mosaic —— 用字符画布局（最直观，Python 3.11+）</text>
+  <rect x="24" y="156" width="240" height="90" rx="4" fill="#f8fafc" stroke="#cbd5e1"/>
+  <g>
+    <rect x="34" y="166" width="100" height="34" rx="3" fill="#dcfce7" stroke="#16a34a"/><text x="84" y="187" font-size="11" text-anchor="middle" font-weight="700" fill="#15803d">A</text>
+    <rect x="138" y="166" width="52" height="70" rx="3" fill="#dbeafe" stroke="#3b82f6"/><text x="164" y="203" font-size="11" text-anchor="middle" font-weight="700" fill="#1e40af">B</text>
+    <rect x="34" y="204" width="100" height="34" rx="3" fill="#f3e8ff" stroke="#9333ea"/><text x="84" y="225" font-size="11" text-anchor="middle" font-weight="700" fill="#7e22ce">C</text>
+  </g>
+  <text x="196" y="176" font-size="10" font-family="monospace" fill="#4b5563">"""AAB</text>
+  <text x="196" y="192" font-size="10" font-family="monospace" fill="#4b5563">   CCB"""</text>
+  <text x="196" y="214" font-size="10" fill="#6b7280">axd['A'] 按名字取</text>
+  <text x="196" y="230" font-size="10" fill="#6b7280">相同字母 = 同一个子图</text>
+
+  <!-- 例 4 add_axes -->
+  <text x="290" y="146" font-size="12" font-weight="700" fill="#24292f">④ add_axes / inset_axes —— 任意位置（含图中图）</text>
+  <rect x="294" y="156" width="200" height="90" rx="4" fill="#f8fafc" stroke="#cbd5e1"/>
+  <rect x="304" y="166" width="180" height="70" rx="3" fill="#fff" stroke="#94a3b8"/>
+  <line x1="314" y1="228" x2="474" y2="228" stroke="#475569" stroke-width="1.2"/>
+  <line x1="314" y1="176" x2="314" y2="228" stroke="#475569" stroke-width="1.2"/>
+  <rect x="404" y="176" width="70" height="46" rx="2" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="439" y="204" font-size="9" text-anchor="middle" fill="#b91c1c">inset（局部放大）</text>
+  <text x="304" y="160" font-size="9" fill="#6b7280">add_axes([left, bottom, w, h])，取值 0~1</text>
+
+  <!-- 底部 -->
+  <rect x="20" y="258" width="690" height="32" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="36" y="272" font-size="11" fill="#78350f"><tspan font-weight="700">间距：</tspan><tspan font-family="monospace">plt.tight_layout()</tspan> 自动收紧（最常用） · <tspan font-family="monospace">fig.subplots_adjust(wspace, hspace)</tspan> 手动调子图间隔 · <tspan font-family="monospace">sharex/sharey</tspan> 共享坐标轴</text>
+  <text x="36" y="286" font-size="11" fill="#78350f"><tspan font-weight="700">易错：</tspan>只有 1 行 1 列时 <tspan font-family="monospace">subplots()</tspan> 返回 Axes 本身（不能 <tspan font-family="monospace">axes[0]</tspan>）；1×N 或 N×1 返回一维数组（<tspan font-family="monospace">axes[i]</tspan>）；2D 才是二维。</text>
+</svg>
+  </div>
+  <div class="note"><b>怎么选：</b>均匀网格 → <code>subplots(nrows, ncols)</code>；比例不等或要跨格 → <code>GridSpec</code>；布局长得很特别 → <code>subplot_mosaic</code>；想在图里塞个小图 → <code>inset_axes</code>。</div>
+</div>
+
 <h3 id="mp-twin">5.7 双 Y 轴 / 共享轴</h3>
 <div class="cell"><div class="bar"><span>twin_axis.py</span><span class="cp">复制</span></div><pre><code><span class="c"># ── 双 Y 轴：两个量级差异大的指标画一起（loss + accuracy）⭐ ──</span>
 fig, ax1 = plt.subplots(figsize=(<span class="n">8</span>, <span class="n">4</span>))
@@ -3104,6 +4272,61 @@ thresh = cm.max() / <span class="n">2</span>
         ax.text(j, i, cm[i, j], ha=<span class="s">'center'</span>, va=<span class="s">'center'</span>,
                 color=<span class="s">'white'</span> <span class="k">if</span> cm[i, j] &gt; thresh <span class="k">else</span> <span class="s">'black'</span>)
 fig.colorbar(im, ax=ax, shrink=<span class="n">0.8</span>); plt.tight_layout()</code></pre></div>
+
+<div class="fig" id="fig-imgshow">
+  <div class="cap"><span class="no">图 16</span>把 PyTorch 张量喂给 imshow：换轴 + 反归一化</div>
+  <div class="pic">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="im" markerWidth="9" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="20" y="22" font-size="13" font-weight="700" fill="#24292f">torch 的 (C,H,W) ≠ matplotlib 的 (H,W,C)，直接 imshow 会报错</text>
+
+  <!-- 左：C,H,W -->
+  <text x="24" y="50" font-size="11" font-weight="700" fill="#b91c1c">PyTorch 张量 (3, H, W)</text>
+  <g>
+    <rect x="24" y="58" width="70" height="70" rx="3" fill="#fee2e2" stroke="#fca5a5"/><text x="59" y="100" font-size="10" text-anchor="middle" fill="#b91c1c">R 通道</text>
+    <rect x="24" y="134" width="70" height="70" rx="3" fill="#fee2e2" stroke="#fca5a5"/><text x="59" y="176" font-size="10" text-anchor="middle" fill="#b91c1c">G 通道</text>
+    <rect x="24" y="210" width="70" height="70" rx="3" fill="#fee2e2" stroke="#fca5a5"/><text x="59" y="252" font-size="10" text-anchor="middle" fill="#b91c1c">B 通道</text>
+  </g>
+  <text x="104" y="96" font-size="10" fill="#6b7280">通道在最前面</text>
+  <text x="104" y="172" font-size="10" fill="#6b7280">（卷积层要求的格式）</text>
+
+  <!-- 中间箭头 -->
+  <line x1="130" y1="146" x2="188" y2="146" stroke="#6b7280" stroke-width="2" marker-end="url(#im)"/>
+  <text x="159" y="132" font-size="11" font-weight="700" fill="#15803d" text-anchor="middle">permute</text>
+  <text x="159" y="170" font-size="10" font-family="monospace" fill="#15803d" text-anchor="middle">(1,2,0)</text>
+
+  <!-- 右：H,W,C -->
+  <text x="200" y="50" font-size="11" font-weight="700" fill="#15803d">imshow 要的 (H, W, 3)</text>
+  <rect x="200" y="58" width="110" height="110" rx="3" fill="#dcfce7" stroke="#86efac" stroke-width="2"/>
+  <text x="255" y="108" font-size="10.5" text-anchor="middle" fill="#15803d">每个像素点存 (R,G,B)</text>
+  <text x="255" y="126" font-size="10" text-anchor="middle" fill="#15803d">通道在最后</text>
+  <text x="322" y="100" font-size="10" fill="#6b7280">← 这才是一张「图片」</text>
+  <text x="322" y="116" font-size="10" fill="#6b7280">imshow / PIL / cv2 都这样</text>
+
+  <!-- 流程条 -->
+  <rect x="20" y="196" width="690" height="34" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="36" y="218" font-size="11.5" fill="#1e3a8a"><tspan font-family="monospace">img = t.detach().cpu().permute(1, 2, 0).numpy()</tspan>　<tspan font-weight="700">四步：断梯度 → 搬 CPU → 换轴 → 转 numpy</tspan></text>
+
+  <!-- 反归一化 -->
+  <rect x="380" y="58" width="330" height="120" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="396" y="80" font-size="11.5" font-weight="700" fill="#b45309">别忘了反归一化</text>
+  <text x="396" y="100" font-size="10.5" fill="#78350f">训练前做过 Normalize(mean, std)，显示前要还原：</text>
+  <text x="396" y="118" font-size="10.5" font-family="monospace" fill="#78350f">img[c] = img[c] * std[c] + mean[c]</text>
+  <text x="396" y="136" font-size="10.5" fill="#78350f">否则画面发灰/发白/颜色怪异</text>
+  <text x="396" y="154" font-size="10.5" fill="#78350f">最后 <tspan font-family="monospace">np.clip(img, 0, 1)</tspan> 防止越界</text>
+  <text x="396" y="172" font-size="10.5" fill="#78350f">灰度图/特征图：单通道 → <tspan font-family="monospace">cmap='gray'</tspan></text>
+
+  <!-- 常见报错 -->
+  <rect x="380" y="196" width="330" height="34" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+  <text x="396" y="218" font-size="11" fill="#991b1b"><tspan font-weight="700">报错 TypeError: Invalid shape</tspan> → 忘了 permute 或忘了 detach</text>
+</svg>
+  </div>
+  <div class="note"><b>批量图片</b>（<code>(B,C,H,W)</code>）不要自己拼，用 <code>torchvision.utils.make_grid</code>：<code>grid = make_grid(batch, nrow=8, normalize=True)</code>，之后同样 <code>grid.permute(1,2,0)</code> 再 <code>imshow</code>。</div>
+</div>
 
 <h3 id="mp-dl">5.11 深度学习实战图</h3>
 <div class="cell"><div class="bar"><span>dl_plots.py</span><span class="cp">复制</span></div><pre><code><span class="c"># ═══ ① 训练曲线（最常画的一张图）═══</span>
@@ -3427,7 +4650,8 @@ search.addEventListener('input',()=>{
   const hits = [];
   while(walker.nextNode()){
     const n = walker.currentNode;
-    if(n.parentElement.closest('pre') === null && n.nodeValue.toLowerCase().includes(q)) hits.push(n);
+    // 跳过代码块与 SVG 图解内部的文本（SVG 里插入 <mark> 不会渲染）
+    if(!n.parentElement.closest('pre') && !n.parentElement.closest('svg') && n.nodeValue.toLowerCase().includes(q)) hits.push(n);
   }
   let firstHit = null;
   hits.forEach(n=>{
